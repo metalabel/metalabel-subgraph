@@ -1,6 +1,10 @@
 type Account @entity {
   id: ID!
   address: String!
+
+  adminForMetalabels: [Metalabel!]! @derivedFrom(field: "admin")
+  ownedMemberships: [Membership!]! @derivedFrom(field: "owner")
+  ownedRecords: [Record!]! @derivedFrom(field: "owner")
 }
 
 type Directory @entity {
@@ -18,20 +22,11 @@ type Metalabel @entity {
   metadataUri: String!
 
   groups: [Metalabel!]! @derivedFrom(name: "metalabel")
+  memberships: [Membership!]! @derivedFrom(name: "metalabel")
   releases: [Release!]! @derivedFrom(name: "metalabel")
+  catalogs: [Catalog!]! @derivedFrom(name: "metalabel")
   drops: [Drop!]! @derivedFrom(name: "metalabel")
   records: [Record!]! @derivedFrom(name: "metalabel")
-  catalogs: [Catalog!]! @derivedFrom(name: "metalabel")
-  memberships: [Membership!]! @derivedFrom(name: "metalabel")
-}
-
-type Catalog @entity {
-  id: ID!
-  collectionAddress: String!
-  metalabel: Metalabel!
-
-  drops: [Drop!]! @derivedFrom(name: "catalog")
-  records: [Record!]! @derivedFrom(name: "catalog")
 }
 
 type Group @entity {
@@ -43,13 +38,31 @@ type Group @entity {
   memberships: [Membership!]! @derivedFrom(name: "group")
 }
 
+type Membership @entity {
+  id: ID!
+  tokenId: Int!
+  owner: Account!
+  group: Group!
+
+  metalabel: Metalabel! # denormalized: group -> metalabel
+}
+
 type Release @entity {
   id: ID!
   metalabel: Metalabel!
   metadataUri: String!
 
   drops: [Drop!]! @derivedFrom(name: "release")
-  records: [Record!]! @derivedFrom
+  records: [Record!]! @derivedFrom(name: "release")
+}
+
+type Catalog @entity {
+  id: ID!
+  collectionAddress: String!
+  metalabel: Metalabel!
+
+  drops: [Drop!]! @derivedFrom(name: "catalog")
+  records: [Record!]! @derivedFrom(name: "catalog")
 }
 
 type Drop @entity {
@@ -66,17 +79,12 @@ type Record @entity {
   id: ID!
   tokenId: Int!
   drop: Drop!
+  metadataUri: String!
+  owner: Account!
 
   release: Release! # denormalized: drop -> release
   metalabel: Metalabel! # dernomalized: drop -> release -> metalabel
   catalog: Catalog! # denormalized: drop -> catalog
 }
 
-type Membership @entity {
-  id: ID!
-  tokenId: Int!
-  holder: Account!
-  group: Group!
 
-  metalabel: Metalabel! # denormalized: group -> metalabel
-}
