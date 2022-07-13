@@ -1,0 +1,82 @@
+type Account @entity {
+  id: ID!
+  address: String!
+}
+
+type Directory @entity {
+  id: ID!
+  collectionAddress: String!
+
+  metalabels: [Metalabel!]! @derivedFrom(field: "directory")
+}
+
+type Metalabel @entity {
+  id: ID!
+  tokenId: Int!
+  admin: Account!
+  directory: Directory!
+  metadataUri: String!
+
+  groups: [Metalabel!]! @derivedFrom(name: "metalabel")
+  releases: [Release!]! @derivedFrom(name: "metalabel")
+  drops: [Drop!]! @derivedFrom(name: "metalabel")
+  records: [Record!]! @derivedFrom(name: "metalabel")
+  catalogs: [Catalog!]! @derivedFrom(name: "metalabel")
+  memberships: [Membership!]! @derivedFrom(name: "metalabel")
+}
+
+type Catalog @entity {
+  id: ID!
+  collectionAddress: String!
+  metalabel: Metalabel!
+
+  drops: [Drop!]! @derivedFrom(name: "catalog")
+  records: [Record!]! @derivedFrom(name: "catalog")
+}
+
+type Group @entity {
+  id: ID!
+  collectionAddress: String!
+  metalabel: Metalabel!
+  permissionsMask: BigInt!
+
+  memberships: [Membership!]! @derivedFrom(name: "group")
+}
+
+type Release @entity {
+  id: ID!
+  metalabel: Metalabel!
+  metadataUri: String!
+
+  drops: [Drop!]! @derivedFrom(name: "release")
+  records: [Record!]! @derivedFrom
+}
+
+type Drop @entity {
+  id: ID!
+  release: Release!
+  mintDestination: Catalog!
+
+  metalabel: Metalabel! # denormalized: release -> metalabel
+
+  records: [Record!]! @derivedFrom(name: "drop")
+}
+
+type Record @entity {
+  id: ID!
+  tokenId: Int!
+  drop: Drop!
+
+  release: Release! # denormalized: drop -> release
+  metalabel: Metalabel! # dernomalized: drop -> release -> metalabel
+  catalog: Catalog! # denormalized: drop -> catalog
+}
+
+type Membership @entity {
+  id: ID!
+  tokenId: Int!
+  holder: Account!
+  group: Group!
+
+  metalabel: Metalabel! # denormalized: group -> metalabel
+}
