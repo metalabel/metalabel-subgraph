@@ -1,50 +1,45 @@
+type Adapter @entity {
+  id: ID!
+  address: String!
+  createdAtTimestamp: Int!
+}
+
 type Account @entity {
   id: ID!
   address: String!
 
+  createdAtTimestamp: Int!
+  lastActivityAtTimestamp: Int!
+
   adminOfMetalabels: [Metalabel!]! @derivedFrom(field: "admin")
-  memberships: [Membership!]! @derivedFrom(field: "owner")
-  ownedRecords: [Record!]! @derivedFrom(field: "owner")
+  # memberships: [Membership!]! @derivedFrom(field: "owner")
+  # ownedRecords: [Record!]! @derivedFrom(field: "owner")
 }
 
-type Directory @entity {
-  id: ID!
-  collectionAddress: String!
+# type Directory @entity {
+#   id: ID!
+#   collectionAddress: String!
 
-  metalabels: [Metalabel!]! @derivedFrom(field: "directory")
-}
+#   metalabels: [Metalabel!]! @derivedFrom(field: "directory")
+# }
 
 type Metalabel @entity {
   id: ID!
-  tokenId: Int!
+  metalabelId: BigInt!
   admin: Account!
-  directory: Directory!
   metadataUri: String!
+  # tokenId: Int!
+  # directory: Directory!
 
-  groups: [Group!]! @derivedFrom(field: "metalabel")
-  memberships: [Membership!]! @derivedFrom(field: "metalabel")
-  releases: [Release!]! @derivedFrom(field: "metalabel")
-  catalogs: [Catalog!]! @derivedFrom(field: "metalabel")
-  drops: [Drop!]! @derivedFrom(field: "metalabel")
-  records: [Record!]! @derivedFrom(field: "metalabel")
-}
+  createdAtTimestamp: Int!
+  lastActivityAtTimestamp: Int!
 
-type Group @entity {
-  id: ID!
-  collectionAddress: String!
-  metalabel: Metalabel!
-  permissionsMask: BigInt!
-
-  memberships: [Membership!]! @derivedFrom(field: "group")
-}
-
-type Membership @entity {
-  id: ID!
-  tokenId: Int!
-  owner: Account!
-  group: Group!
-
-  metalabel: Metalabel! # denormalized: group -> metalabel
+  # groups: [Group!]! @derivedFrom(field: "metalabel")
+  # memberships: [Membership!]! @derivedFrom(field: "metalabel")
+  # releases: [Release!]! @derivedFrom(field: "metalabel")
+  # catalogs: [Catalog!]! @derivedFrom(field: "metalabel")
+  # drops: [Drop!]! @derivedFrom(field: "metalabel")
+  # records: [Record!]! @derivedFrom(field: "metalabel")
 }
 
 type Release @entity {
@@ -52,39 +47,62 @@ type Release @entity {
   metalabel: Metalabel!
   metadataUri: String!
 
-  drops: [Drop!]! @derivedFrom(field: "release")
-  records: [Record!]! @derivedFrom(field: "release")
+  createdAtTimestamp: Int!
+  lastActivityAtTimestamp: Int!
+
+  # drops: [Drop!]! @derivedFrom(field: "release")
+  # records: [Record!]! @derivedFrom(field: "release")
 }
 
-type Catalog @entity {
-  id: ID!
-  collectionAddress: String!
-  metalabel: Metalabel!
+# type Group @entity {
+#   id: ID!
+#   collectionAddress: String!
+#   metalabel: Metalabel!
+#   permissionsMask: BigInt!
 
-  drops: [Drop!]! @derivedFrom(field: "catalog")
-  records: [Record!]! @derivedFrom(field: "catalog")
-}
+#   memberships: [Membership!]! @derivedFrom(field: "group")
+# }
 
-type Drop @entity {
-  id: ID!
-  release: Release!
-  catalog: Catalog!
+# type Membership @entity {
+#   id: ID!
+#   tokenId: Int!
+#   owner: Account!
+#   group: Group!
 
-  metalabel: Metalabel! # denormalized: release -> metalabel
+#   metalabel: Metalabel! # denormalized: group -> metalabel
+# }
 
-  records: [Record!]! @derivedFrom(field: "drop")
-}
 
-type Record @entity {
-  id: ID!
-  tokenId: Int!
-  drop: Drop!
-  metadataUri: String!
-  owner: Account!
 
-  release: Release! # denormalized: drop -> release
-  metalabel: Metalabel! # dernomalized: drop -> release -> metalabel
-  catalog: Catalog! # denormalized: drop -> catalog
-}
+# type Catalog @entity {
+#   id: ID!
+#   collectionAddress: String!
+#   metalabel: Metalabel!
+
+#   drops: [Drop!]! @derivedFrom(field: "catalog")
+#   records: [Record!]! @derivedFrom(field: "catalog")
+# }
+
+# type Drop @entity {
+#   id: ID!
+#   release: Release!
+#   catalog: Catalog!
+
+#   metalabel: Metalabel! # denormalized: release -> metalabel
+
+#   records: [Record!]! @derivedFrom(field: "drop")
+# }
+
+# type Record @entity {
+#   id: ID!
+#   tokenId: Int!
+#   drop: Drop!
+#   metadataUri: String!
+#   owner: Account!
+
+#   release: Release! # denormalized: drop -> release
+#   metalabel: Metalabel! # dernomalized: drop -> release -> metalabel
+#   catalog: Catalog! # denormalized: drop -> catalog
+# }
 
 
