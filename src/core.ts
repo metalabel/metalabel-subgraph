@@ -1,6 +1,7 @@
 import { store } from "@graphprotocol/graph-ts";
 import { AdapterRegistration, MetalabelCreated } from "../generated/CoreDataSource/Core";
 import { Adapter, Metalabel } from "../generated/schema";
+import { getOrCreateAccount } from "./entities";
 
 export function handleAdapterRegistration(event: AdapterRegistration): void {
   const timestamp = event.block.timestamp;
@@ -20,9 +21,13 @@ export function handleMetalabelCreated(event: MetalabelCreated): void {
   const timestamp = event.block.timestamp;
   const metalabelId = event.params.metalabelId;
 
+  const admin = getOrCreateAccount(event.params.admin, timestamp);
+  admin.lastActivityAtTimestamp = timestamp.toI32();
+  admin.save();
+
   const metalabel = new Metalabel(`metalabel-${metalabelId}`);
   metalabel.metalabelId = metalabelId;
-  metalabel.admin = event.params.admin.toHexString();
+  metalabel.admin = admin.id;
   metalabel.metadataUri = event.params.metadataUri;
   metalabel.createdAtTimestamp = timestamp.toI32();
   metalabel.lastActivityAtTimestamp = timestamp.toI32();
