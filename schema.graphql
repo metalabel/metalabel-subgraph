@@ -2,8 +2,8 @@ type Account @entity {
   id: ID!
   address: String!
 
-  adminForMetalabels: [Metalabel!]! @derivedFrom(field: "admin")
-  ownedMemberships: [Membership!]! @derivedFrom(field: "owner")
+  adminOfMetalabels: [Metalabel!]! @derivedFrom(field: "admin")
+  memberships: [Membership!]! @derivedFrom(field: "owner")
   ownedRecords: [Record!]! @derivedFrom(field: "owner")
 }
 
@@ -21,12 +21,12 @@ type Metalabel @entity {
   directory: Directory!
   metadataUri: String!
 
-  groups: [Metalabel!]! @derivedFrom(name: "metalabel")
-  memberships: [Membership!]! @derivedFrom(name: "metalabel")
-  releases: [Release!]! @derivedFrom(name: "metalabel")
-  catalogs: [Catalog!]! @derivedFrom(name: "metalabel")
-  drops: [Drop!]! @derivedFrom(name: "metalabel")
-  records: [Record!]! @derivedFrom(name: "metalabel")
+  groups: [Group!]! @derivedFrom(field: "metalabel")
+  memberships: [Membership!]! @derivedFrom(field: "metalabel")
+  releases: [Release!]! @derivedFrom(field: "metalabel")
+  catalogs: [Catalog!]! @derivedFrom(field: "metalabel")
+  drops: [Drop!]! @derivedFrom(field: "metalabel")
+  records: [Record!]! @derivedFrom(field: "metalabel")
 }
 
 type Group @entity {
@@ -35,7 +35,7 @@ type Group @entity {
   metalabel: Metalabel!
   permissionsMask: BigInt!
 
-  memberships: [Membership!]! @derivedFrom(name: "group")
+  memberships: [Membership!]! @derivedFrom(field: "group")
 }
 
 type Membership @entity {
@@ -52,8 +52,8 @@ type Release @entity {
   metalabel: Metalabel!
   metadataUri: String!
 
-  drops: [Drop!]! @derivedFrom(name: "release")
-  records: [Record!]! @derivedFrom(name: "release")
+  drops: [Drop!]! @derivedFrom(field: "release")
+  records: [Record!]! @derivedFrom(field: "release")
 }
 
 type Catalog @entity {
@@ -61,18 +61,18 @@ type Catalog @entity {
   collectionAddress: String!
   metalabel: Metalabel!
 
-  drops: [Drop!]! @derivedFrom(name: "catalog")
-  records: [Record!]! @derivedFrom(name: "catalog")
+  drops: [Drop!]! @derivedFrom(field: "catalog")
+  records: [Record!]! @derivedFrom(field: "catalog")
 }
 
 type Drop @entity {
   id: ID!
   release: Release!
-  mintDestination: Catalog!
+  catalog: Catalog!
 
   metalabel: Metalabel! # denormalized: release -> metalabel
 
-  records: [Record!]! @derivedFrom(name: "drop")
+  records: [Record!]! @derivedFrom(field: "drop")
 }
 
 type Record @entity {
