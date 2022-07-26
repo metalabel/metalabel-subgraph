@@ -1,0 +1,6 @@
+{
+	"network": "goerli",
+	"startBlock": "7294125",
+	"coreAddress": "0x91367F9C5a07912a4870ceA43b3893366c05b35c",
+	"registryAddress": "0x8c6DF8A349f0C861F7ABb0e8EB10cB3b0cFD5fDB"
+}
