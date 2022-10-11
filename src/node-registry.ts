@@ -1,6 +1,7 @@
 import { AuthorizedManagerSet, NodeCreated, NodeMetadata } from '../generated/NodeRegistryDataSource/NodeRegistry';
-import { Node } from '../generated/schema';
+import { Node, AuthorizedNodeManager } from '../generated/schema';
 import { getAccount, getNode } from './entities';
+import { store } from '@graphprotocol/graph-ts';
 
 const nodeTypeToEnum = (type: i32): string => {
   switch (type) {
@@ -58,5 +59,18 @@ export function handleNodeMetadata(event: NodeMetadata): void {
 }
 
 export function handleAuthorizedManagerSet(event: AuthorizedManagerSet): void {
+  const node = getNode(event.params.id);
+  const address = event.params.manager.toHexString();
+  const id = `authorized-node-manager-${node.id}-${address}`;
+  const existing = AuthorizedNodeManager.load(id);
 
+  if (existing && !event.params.isAuthorized) {
+    store.remove('AuthorizedNodeManager', id);
+  } else if (!existing && event.params.isAuthorized) {
+    const entity = new AuthorizedNodeManager(id);
+    entity.node = node.id;
+    entity.address = address;
+    entity.createdAtTimestamp = event.block.timestamp.toI32();
+    entity.save();
+  }
 }

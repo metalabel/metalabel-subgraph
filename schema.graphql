@@ -28,6 +28,15 @@ type Node @entity {
 
   children: [Node!]! @derivedFrom(field: "parent")
   accessChildren: [Node!]! @derivedFrom(field: "accessNode")
+  authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
+
+  createdAtTimestamp: Int!
+}
+
+type AuthorizedNodeManager @entity {
+  id: ID!
+  node: Node!
+  address:  String!
 
   createdAtTimestamp: Int!
 }
