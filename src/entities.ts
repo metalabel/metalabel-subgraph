@@ -1,23 +1,16 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { Account, Metalabel } from "../generated/schema";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { Node, Account } from "../generated/schema";
 
-export const getMetalabel = (metalabelId: BigInt): Metalabel => {
-  const id = `metalabel-${metalabelId}`;
-  let metalabel = Metalabel.load(id);
-  if (metalabel != null) return metalabel;
-  throw new Error(`metalabel ${metalabelId} not found`);
+export const getNode = (nodeId: BigInt): Node => {
+  const id = `node-${nodeId.toString()}`;
+  const node = Node.load(id);
+  if (!node) throw new Error(`Node ${id} not found`);
+  return node;
 }
 
-export const getOrCreateAccount = (address: Address, timestamp: BigInt): Account => {
-  const accountId = `account-${address.toHexString()}`;
-  let account = Account.load(accountId);
-  if (account != null) return account;
-
-  account = new Account(accountId);
-  account.address = address.toHexString();
-  account.createdAtTimestamp = timestamp.toI32();
-  account.lastActivityAtTimestamp = timestamp.toI32();
-
-  account.save();
+export const getAccount = (accountId: BigInt): Account => {
+  const id = `account-${accountId.toString()}`;
+  const account = Account.load(id);
+  if (!account) throw new Error(`Account ${id} not found`);
   return account;
 }
