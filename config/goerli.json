@@ -2,5 +2,7 @@
 	"network": "goerli",
 	"startBlock": "7750776",
 	"AccountRegistry": "0x3EEDE01Ff7b23289BA8AF64a1960752b8741219D",
-	"NodeRegistry": "0x229397EbcE6FA2aBa0d211b05d1b507b95AfF6ce"
+	"NodeRegistry": "0x229397EbcE6FA2aBa0d211b05d1b507b95AfF6ce",
+	"Catalog": "0x197c52f93D1bFfC158C643881b7E512df785FAe9",
+	"CatalogFactory": "0xE153bA5d3949712bEFa542bbA67C8176958e906b"
 }
