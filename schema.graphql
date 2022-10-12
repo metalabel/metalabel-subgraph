@@ -26,6 +26,8 @@ type Node @entity {
   parent: Node
   accessNode: Node
 
+  catalogs: [Catalog!]! @derivedFrom(field: "controlNode")
+
   children: [Node!]! @derivedFrom(field: "parent")
   accessChildren: [Node!]! @derivedFrom(field: "accessNode")
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
@@ -39,4 +41,41 @@ type AuthorizedNodeManager @entity {
   address:  String!
 
   createdAtTimestamp: Int!
+}
+
+type Catalog @entity {
+  id: ID!
+  address: String!
+  name: String!
+  symbol: String!
+  ownerAddress: String!
+  controlNode: Node!
+
+  createdAtTimestamp: Int!
+
+  records: [Record!]! @derivedFrom(field: "catalog")
+  sequences: [Sequence!]! @derivedFrom(field: "catalog")
+}
+
+type Record @entity {
+  id: ID!
+  tokenId: BigInt!
+  catalog: Catalog!
+  sequence: Sequence!
+  data: BigInt!
+  etching: String!
+
+  createdAtTimestamp: Int!
+}
+
+type Sequence @entity {
+  id: ID!
+  catalog: Catalog!
+  sequenceId: Int!
+  dropNode: Node!
+  engineAddress: String!
+
+  createdAtTimestamp: Int!
+
+  records: [Record!]! @derivedFrom(field: "sequence")
 }

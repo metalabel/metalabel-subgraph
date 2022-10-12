@@ -44,3 +44,46 @@ dataSources:
       handler: handleNodeMetadata
     - event: AuthorizedManagerSet(indexed uint80,indexed address,bool)
       handler: handleAuthorizedManagerSet
+- name: CatalogFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{CatalogFactory}}"
+    abi: CatalogFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/catalog-factory.ts
+    entities: [ ]
+    abis:
+    - name: CatalogFactory
+      file: ./abis/CatalogFactory.json
+    eventHandlers:
+    - event: CatalogCreated(indexed address,string,string)
+      handler: handleCatalogCreated
+templates:
+- name: CatalogDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    abi: Catalog
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/catalog.ts
+    entities: [ ]
+    abis:
+    - name: Catalog
+      file: ./abis/Catalog.json
+    eventHandlers:
+    - event: ControlNodeSet(indexed uint80)
+      handler: handleControlNodeSet
+    - event: OwnershipTransferred(indexed address,indexed address)
+      handler: handleOwnershipTransferred
+    - event: SequenceConfigured(indexed uint16,indexed uint80,address)
+      handler: handleSequenceConfigured
+    - event: RecordCreated(indexed uint256,indexed uint16,uint80,string)
+      handler: handleRecordCreated

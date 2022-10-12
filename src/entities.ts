@@ -1,5 +1,5 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { Node, Account } from "../generated/schema";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { Node, Account, Catalog, Sequence } from "../generated/schema";
 
 export const getNode = (nodeId: BigInt): Node => {
   const id = `node-${nodeId.toString()}`;
@@ -13,4 +13,18 @@ export const getAccount = (accountId: BigInt): Account => {
   const account = Account.load(id);
   if (!account) throw new Error(`Account ${id} not found`);
   return account;
+}
+
+export const getCatalog = (address: Address): Catalog => {
+  const id = `catalog-${address.toHexString()}`;
+  const catalog = Catalog.load(id);
+  if (!catalog) throw new Error(`Catalog ${id} not found`);
+  return catalog;
+}
+
+export const getSequence = (catalogId: string, sequenceId: i32): Sequence => {
+  const id = `sequence-${catalogId}-${sequenceId.toString()}`;
+  const sequence = Sequence.load(id);
+  if (!sequence) throw new Error(`Sequence ${id} not found`);
+  return sequence;
 }

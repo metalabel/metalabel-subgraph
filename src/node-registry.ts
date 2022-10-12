@@ -18,7 +18,6 @@ const nodeTypeToEnum = (type: i32): string => {
     case 6:
       return 'SPLIT';
     default:
-    case 0:
       return 'UNKNOWN';
   }
 }
