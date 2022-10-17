@@ -4,6 +4,8 @@ type Account @entity {
   address: String!
   recoveryAddress: String!
 
+  ownedNodes: [Node!]! @derivedFrom(field: "owner")
+
   createdAtTimestamp: Int!
 }
 
@@ -64,6 +66,7 @@ type Record @entity {
   sequence: Sequence!
   data: BigInt!
   etching: String!
+  ownerAddress: String!
 
   createdAtTimestamp: Int!
 }

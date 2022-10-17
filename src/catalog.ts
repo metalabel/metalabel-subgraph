@@ -1,6 +1,6 @@
 import { Record, Sequence } from '../generated/schema';
-import { ControlNodeSet, OwnershipTransferred, RecordCreated, SequenceConfigured } from '../generated/templates/CatalogDatasource/Catalog';
-import { getCatalog, getNode, getSequence } from './entities';
+import { ControlNodeSet, OwnershipTransferred, RecordCreated, SequenceConfigured, Transfer, Catalog } from '../generated/templates/CatalogDatasource/Catalog';
+import { getCatalog, getNode, getRecordOrNull, getSequence } from './entities';
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const catalog = getCatalog(event.address);
@@ -44,5 +44,22 @@ export function handleRecordCreated(event: RecordCreated): void {
   record.data = event.params.data;
   record.etching = event.params.etching;
   record.createdAtTimestamp = event.block.timestamp.toI32();
+
+  const collection = Catalog.bind(event.address);
+  record.ownerAddress = collection.ownerOf(record.tokenId).toHexString();
+
+  record.save();
+}
+
+export function handleTransfer(event: Transfer): void {
+  const catalog = getCatalog(event.address);
+  const record = getRecordOrNull(catalog.id, event.params.id);
+  if (record === null) {
+    // on mint, the RecordCreated event has not yet been emittted, so skip owner
+    // updates. handleRecoredCreated will update the owner
+    return;
+  }
+
+  record.ownerAddress = event.params.to.toHexString();
   record.save();
 }

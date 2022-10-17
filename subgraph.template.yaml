@@ -87,3 +87,5 @@ templates:
       handler: handleSequenceConfigured
     - event: RecordCreated(indexed uint256,indexed uint16,uint80,string)
       handler: handleRecordCreated
+    - event: Transfer(indexed address,indexed address,indexed uint256)
+      handler: handleTransfer

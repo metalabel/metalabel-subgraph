@@ -1,5 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { Node, Account, Catalog, Sequence } from "../generated/schema";
+import { Node, Account, Catalog, Sequence, Record } from "../generated/schema";
 
 export const getNode = (nodeId: BigInt): Node => {
   const id = `node-${nodeId.toString()}`;
@@ -27,4 +27,10 @@ export const getSequence = (catalogId: string, sequenceId: i32): Sequence => {
   const sequence = Sequence.load(id);
   if (!sequence) throw new Error(`Sequence ${id} not found`);
   return sequence;
+}
+
+export const getRecordOrNull = (catalogId: string, tokenId: BigInt): Record | null=> {
+  const id = `record-${catalogId}-${tokenId.toString()}`;
+  const record = Record.load(id);
+  return record;
 }
