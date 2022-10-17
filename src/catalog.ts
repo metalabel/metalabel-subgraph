@@ -35,12 +35,14 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
 
 export function handleRecordCreated(event: RecordCreated): void {
   const catalog = getCatalog(event.address);
+  const sequence = getSequence(catalog.id, event.params.sequenceId);
 
   const id = `record-${catalog.id}-${event.params.tokenId.toString()}`;
   const record = new Record(id);
   record.tokenId = event.params.tokenId;
   record.catalog = catalog.id;
-  record.sequence = getSequence(catalog.id, event.params.sequenceId).id;
+  record.sequence = sequence.id;
+  record.dropNode = sequence.dropNode;
   record.data = event.params.data;
   record.etching = event.params.etching;
   record.createdAtTimestamp = event.block.timestamp.toI32();

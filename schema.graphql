@@ -62,11 +62,13 @@ type Catalog @entity {
 type Record @entity {
   id: ID!
   tokenId: BigInt!
-  catalog: Catalog!
   sequence: Sequence!
-  data: BigInt!
   etching: String!
   ownerAddress: String!
+  data: BigInt!
+
+  catalog: Catalog! # denormalized, sequence -> catalog
+  dropNode: Node! # denormalized, sequence -> dropNode
 
   createdAtTimestamp: Int!
 }
