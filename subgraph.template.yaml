@@ -21,6 +21,25 @@ dataSources:
     eventHandlers:
     - event: AccountCreated(indexed uint80,indexed address,address)
       handler: handleAccountCreated
+- name: SimpleNameAuthorityDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{SimpleNameAuthority}}"
+    abi: SimpleNameAuthority
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/simple-name-authority.ts
+    entities: [ ]
+    abis:
+    - name: SimpleNameAuthority
+      file: ./abis/SimpleNameAuthority.json
+    eventHandlers:
+    - event: NameRegistered(string,uint80)
+      handler: handleNameRegistered
 - name: NodeRegistryDataSource
   kind: ethereum/contract
   network: {{network}}
