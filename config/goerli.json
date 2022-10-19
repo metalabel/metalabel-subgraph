@@ -1,10 +1,10 @@
 {
   "network": "goerli",
   "startBlock": "7750776",
-  "AccountRegistry": "0xB744F2E3698303b4E36AcA2Dc581d2E460d581A5",
-  "SimpleNameAuthority": "0xFd598Ab41DA82fa404Ae93bC0820a6ff6c5527fc",
-  "NodeRegistry": "0x95FcFC00d7e210c453da368f7ce9D171FC6380d0",
+  "AccountRegistry": "0xb5a90F66213eB97530CB322b3148B4E102Aa67Ff",
+  "SimpleNameAuthority": "0xAc1058208f3F62eCC9969ad8A3106755F916f94f",
+  "NodeRegistry": "0x335cb8054836F3b2b7f697B39eC9Ee56600ca050",
   "Catalog": "0x197c52f93D1bFfC158C643881b7E512df785FAe9",
-  "CatalogFactory": "0x861b15c44E53fC525F94442581297F8265c3C4e0",
+  "CatalogFactory": "0xfd89C79f668a64f608C9f6308cbb24C7204f8E1a",
   "TestEngine": "0xE86D34d5582a6c70033d9e3cC706bE5118428457"
 }

@@ -19,7 +19,7 @@ dataSources:
     - name: AccountRegistry
       file: ./abis/AccountRegistry.json
     eventHandlers:
-    - event: AccountCreated(indexed uint80,indexed address,address)
+    - event: AccountCreated(indexed uint80,indexed address,address,string)
       handler: handleAccountCreated
 - name: SimpleNameAuthorityDataSource
   kind: ethereum/contract
