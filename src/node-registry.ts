@@ -17,6 +17,8 @@ const nodeTypeToEnum = (type: i32): string => {
       return 'TREASURY';
     case 6:
       return 'SPLIT';
+    case 7:
+      return 'REALM';
     default:
       return 'UNKNOWN';
   }

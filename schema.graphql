@@ -19,6 +19,7 @@ enum NodeType {
   DROP
   TREASURY
   SPLIT
+  REALM
 }
 
 type Node @entity {
