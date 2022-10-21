@@ -36,6 +36,7 @@ type Node @entity {
   children: [Node!]! @derivedFrom(field: "parent")
   accessChildren: [Node!]! @derivedFrom(field: "accessNode")
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
+  sequences: [Sequence!]! @derivedFrom(field: "dropNode")
 
   createdAtTimestamp: Int!
 }
