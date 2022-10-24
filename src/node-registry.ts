@@ -1,4 +1,4 @@
-import { AuthorizedManagerSet, NodeCreated, NodeMetadata } from '../generated/NodeRegistryDataSource/NodeRegistry';
+import { AuthorizedManagerSet, NodeCreated } from '../generated/NodeRegistryDataSource/NodeRegistry';
 import { Node, AuthorizedNodeManager } from '../generated/schema';
 import { getAccount, getNode } from './entities';
 import { store } from '@graphprotocol/graph-ts';
@@ -37,7 +37,7 @@ export function handleNodeCreated(event: NodeCreated): void {
   const node = new Node(id);
   node.nodeId = nodeId;
   node.nodeType = nodeTypeToEnum(nodeType);
-  node.metadata = '';
+  node.metadata = event.params.metadata;
 
   if (!ownerAccountId.isZero()) {
     node.owner = getAccount(ownerAccountId).id;
@@ -50,12 +50,6 @@ export function handleNodeCreated(event: NodeCreated): void {
   }
 
   node.createdAtTimestamp = timestamp;
-  node.save();
-}
-
-export function handleNodeMetadata(event: NodeMetadata): void {
-  const node = getNode(event.params.id);
-  node.metadata = event.params.metadata;
   node.save();
 }
 

@@ -57,12 +57,11 @@ dataSources:
     - name: NodeRegistry
       file: ./abis/NodeRegistry.json
     eventHandlers:
-    - event: NodeCreated(indexed uint80,indexed uint16,indexed uint80,uint80,uint80)
+    - event: NodeCreated(indexed uint80,indexed uint16,indexed uint80,uint80,uint80,string)
       handler: handleNodeCreated
-    - event: NodeMetadata(indexed uint80,string)
-      handler: handleNodeMetadata
     - event: AuthorizedManagerSet(indexed uint80,indexed address,bool)
       handler: handleAuthorizedManagerSet
+
 - name: CatalogFactoryDataSource
   kind: ethereum/contract
   network: {{network}}
