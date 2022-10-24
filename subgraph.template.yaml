@@ -61,6 +61,8 @@ dataSources:
       handler: handleNodeCreated
     - event: AuthorizedManagerSet(indexed uint80,indexed address,bool)
       handler: handleAuthorizedManagerSet
+    - event: NodeBroadcast(indexed uint80,string,string)
+      handler: handleNodeBroadcast
 
 - name: CatalogFactoryDataSource
   kind: ethereum/contract

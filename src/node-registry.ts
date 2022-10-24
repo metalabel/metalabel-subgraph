@@ -1,29 +1,33 @@
-import { AuthorizedManagerSet, NodeCreated } from '../generated/NodeRegistryDataSource/NodeRegistry';
-import { Node, AuthorizedNodeManager } from '../generated/schema';
-import { getAccount, getNode } from './entities';
-import { store } from '@graphprotocol/graph-ts';
+import {
+  AuthorizedManagerSet,
+  NodeBroadcast,
+  NodeCreated,
+} from "../generated/NodeRegistryDataSource/NodeRegistry";
+import { Node, AuthorizedNodeManager } from "../generated/schema";
+import { getAccount, getNode } from "./entities";
+import { store } from "@graphprotocol/graph-ts";
+import { log } from "@graphprotocol/graph-ts";
 
 const nodeTypeToEnum = (type: i32): string => {
   switch (type) {
     case 1:
-      return 'METALABEL';
+      return "METALABEL";
     case 2:
-      return 'SQUAD';
+      return "SQUAD";
     case 3:
-      return 'RELEASE';
+      return "RELEASE";
     case 4:
-      return 'DROP';
+      return "DROP";
     case 5:
-      return 'TREASURY';
+      return "TREASURY";
     case 6:
-      return 'SPLIT';
+      return "SPLIT";
     case 7:
-      return 'REALM';
+      return "REALM";
     default:
-      return 'UNKNOWN';
+      return "UNKNOWN";
   }
-}
-
+};
 
 export function handleNodeCreated(event: NodeCreated): void {
   const timestamp = event.block.timestamp.toI32();
@@ -60,12 +64,21 @@ export function handleAuthorizedManagerSet(event: AuthorizedManagerSet): void {
   const existing = AuthorizedNodeManager.load(id);
 
   if (existing && !event.params.isAuthorized) {
-    store.remove('AuthorizedNodeManager', id);
+    store.remove("AuthorizedNodeManager", id);
   } else if (!existing && event.params.isAuthorized) {
     const entity = new AuthorizedNodeManager(id);
     entity.node = node.id;
     entity.address = address;
     entity.createdAtTimestamp = event.block.timestamp.toI32();
     entity.save();
+  }
+}
+
+export function handleNodeBroadcast(event: NodeBroadcast): void {
+  const node = getNode(event.params.id);
+
+  if (event.params.topic.localeCompare("metadata") === 0) {
+    node.metadata = event.params.message;
+    node.save();
   }
 }
