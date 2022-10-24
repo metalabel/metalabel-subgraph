@@ -7,7 +7,13 @@ import {
   Transfer,
   Catalog,
 } from "../generated/templates/CatalogDatasource/Catalog";
-import { getCatalog, getNode, getRecordOrNull, getSequence } from "./entities";
+import {
+  getCatalog,
+  getNode,
+  getNodeById,
+  getRecordOrNull,
+  getSequence,
+} from "./entities";
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const catalog = getCatalog(event.address);
@@ -17,7 +23,19 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 
 export function handleControlNodeSet(event: ControlNodeSet): void {
   const catalog = getCatalog(event.address);
-  catalog.controlNode = getNode(event.params.controlNode).id;
+
+  if (catalog.controlNode != "") {
+    const oldNode = getNodeById(catalog.controlNode);
+    oldNode.catalogCount -= 1;
+    oldNode.save();
+  }
+
+  const node = getNode(event.params.controlNode);
+  catalog.controlNode = node.id;
+
+  node.catalogCount += 1;
+  node.save();
+
   catalog.save();
 }
 
@@ -48,12 +66,16 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
 export function handleRecordCreated(event: RecordCreated): void {
   const catalog = getCatalog(event.address);
   const sequence = getSequence(catalog.id, event.params.sequenceId);
+  const node = getNodeById(sequence.dropNode);
 
   catalog.recordCount += 1;
   catalog.save();
 
   sequence.recordCount += 1;
   sequence.save();
+
+  node.recordCount += 1;
+  node.save();
 
   const id = `record-${catalog.id}-${event.params.tokenId.toString()}`;
   const record = new Record(id);

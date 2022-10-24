@@ -37,11 +37,14 @@ type Node @entity {
   accessChildren: [Node!]! @derivedFrom(field: "accessNode")
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
+  records: [Record!]! @derivedFrom(field: "dropNode")
 
+  catalogCount: Int!
   childrenCount: Int!
   accessChildrenCount: Int!
   authorizedNodeManagerCount: Int!
   sequenceCount: Int!
+  recordCount: Int!
 
   createdAtTimestamp: Int!
 }

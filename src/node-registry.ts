@@ -58,10 +58,12 @@ export function handleNodeCreated(event: NodeCreated): void {
     accessNode.save();
   }
 
+  node.catalogCount = 0;
   node.childrenCount = 0;
   node.accessChildrenCount = 0;
   node.authorizedNodeManagerCount = 0;
   node.sequenceCount = 0;
+  node.recordCount = 0;
 
   node.createdAtTimestamp = timestamp;
   node.save();

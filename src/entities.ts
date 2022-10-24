@@ -1,11 +1,15 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Node, Account, Catalog, Sequence, Record } from "../generated/schema";
 
-export const getNode = (nodeId: BigInt): Node => {
-  const id = `node-${nodeId.toString()}`;
+export const getNodeById = (id: string): Node => {
   const node = Node.load(id);
   if (!node) throw new Error(`Node ${id} not found`);
   return node;
+};
+
+export const getNode = (nodeId: BigInt): Node => {
+  const id = `node-${nodeId.toString()}`;
+  return getNodeById(id);
 };
 
 export const getAccount = (accountId: BigInt): Account => {
