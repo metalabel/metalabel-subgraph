@@ -89,5 +89,7 @@ type Sequence @entity {
 
   createdAtTimestamp: Int!
 
+  recordCount: Int!
+
   records: [Record!]! @derivedFrom(field: "sequence")
 }

@@ -28,15 +28,13 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
   catalog.sequenceCount += 1;
   catalog.save();
 
-  let sequence = Sequence.load(sId);
-  if (!sequence) {
-    sequence = new Sequence(sId);
-    sequence.catalog = catalog.id;
-    sequence.sequenceId = event.params.sequenceId;
-    sequence.dropNode = getNode(event.params.dropId).id;
-    sequence.engineAddress = event.params.engine.toHexString();
-    sequence.createdAtTimestamp = event.block.timestamp.toI32();
-  }
+  const sequence = new Sequence(sId);
+  sequence.catalog = catalog.id;
+  sequence.sequenceId = event.params.sequenceId;
+  sequence.dropNode = getNode(event.params.dropId).id;
+  sequence.engineAddress = event.params.engine.toHexString();
+  sequence.createdAtTimestamp = event.block.timestamp.toI32();
+  sequence.recordCount = 0;
 
   sequence.dropNode = getNode(event.params.dropId).id;
   sequence.engineAddress = event.params.engine.toHexString();
@@ -49,6 +47,9 @@ export function handleRecordCreated(event: RecordCreated): void {
 
   catalog.recordCount += 1;
   catalog.save();
+
+  sequence.recordCount += 1;
+  sequence.save();
 
   const id = `record-${catalog.id}-${event.params.tokenId.toString()}`;
   const record = new Record(id);
