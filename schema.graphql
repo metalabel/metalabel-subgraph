@@ -59,6 +59,9 @@ type Catalog @entity {
 
   createdAtTimestamp: Int!
 
+  recordCount: Int!
+  sequenceCount: Int!
+
   records: [Record!]! @derivedFrom(field: "catalog")
   sequences: [Sequence!]! @derivedFrom(field: "catalog")
 }

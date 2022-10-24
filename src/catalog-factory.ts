@@ -13,6 +13,8 @@ export function handleCatalogCreated(event: CatalogCreated): void {
   catalog.ownerAddress = ""; // will be set in handleOwnershipTransferred
   catalog.controlNode = ""; // will be set in handleControlNodeChanged
   catalog.createdAtTimestamp = timestamp;
+  catalog.recordCount = 0;
+  catalog.sequenceCount = 0;
   catalog.save();
 
   // spawn new datasource for this catalog

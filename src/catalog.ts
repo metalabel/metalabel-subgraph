@@ -25,6 +25,9 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
   const catalog = getCatalog(event.address);
   const sId = `sequence-${catalog.id}-${event.params.sequenceId.toString()}`;
 
+  catalog.sequenceCount += 1;
+  catalog.save();
+
   let sequence = Sequence.load(sId);
   if (!sequence) {
     sequence = new Sequence(sId);
@@ -43,6 +46,9 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
 export function handleRecordCreated(event: RecordCreated): void {
   const catalog = getCatalog(event.address);
   const sequence = getSequence(catalog.id, event.params.sequenceId);
+
+  catalog.recordCount += 1;
+  catalog.save();
 
   const id = `record-${catalog.id}-${event.params.tokenId.toString()}`;
   const record = new Record(id);
