@@ -1,6 +1,13 @@
-import { Record, Sequence } from '../generated/schema';
-import { ControlNodeSet, OwnershipTransferred, RecordCreated, SequenceConfigured, Transfer, Catalog } from '../generated/templates/CatalogDatasource/Catalog';
-import { getCatalog, getNode, getRecordOrNull, getSequence } from './entities';
+import { Record, Sequence } from "../generated/schema";
+import {
+  ControlNodeSet,
+  OwnershipTransferred,
+  RecordCreated,
+  SequenceConfigured,
+  Transfer,
+  Catalog,
+} from "../generated/templates/CatalogDatasource/Catalog";
+import { getCatalog, getNode, getRecordOrNull, getSequence } from "./entities";
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const catalog = getCatalog(event.address);

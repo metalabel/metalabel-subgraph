@@ -1,4 +1,4 @@
-import { AccountCreated } from "../generated/AccountRegistryDataSource/AccountRegistry"
+import { AccountCreated } from "../generated/AccountRegistryDataSource/AccountRegistry";
 import { Account } from "../generated/schema";
 
 export function handleAccountCreated(event: AccountCreated): void {

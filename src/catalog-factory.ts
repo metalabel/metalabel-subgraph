@@ -1,4 +1,4 @@
-import { CatalogCreated } from "../generated/CatalogFactoryDataSource/CatalogFactory"
+import { CatalogCreated } from "../generated/CatalogFactoryDataSource/CatalogFactory";
 import { Catalog } from "../generated/schema";
 import { CatalogDataSource } from "../generated/templates";
 
@@ -10,8 +10,8 @@ export function handleCatalogCreated(event: CatalogCreated): void {
   catalog.address = address.toHexString();
   catalog.name = event.params.name;
   catalog.symbol = event.params.symbol;
-  catalog.ownerAddress = ''; // will be set in handleOwnershipTransferred
-  catalog.controlNode = ''; // will be set in handleControlNodeChanged
+  catalog.ownerAddress = ""; // will be set in handleOwnershipTransferred
+  catalog.controlNode = ""; // will be set in handleControlNodeChanged
   catalog.createdAtTimestamp = timestamp;
   catalog.save();
 
