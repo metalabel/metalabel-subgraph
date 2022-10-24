@@ -6,7 +6,6 @@ import {
 import { Node, AuthorizedNodeManager } from "../generated/schema";
 import { getAccount, getNode } from "./entities";
 import { store } from "@graphprotocol/graph-ts";
-import { log } from "@graphprotocol/graph-ts";
 
 const nodeTypeToEnum = (type: i32): string => {
   switch (type) {
@@ -47,11 +46,22 @@ export function handleNodeCreated(event: NodeCreated): void {
     node.owner = getAccount(ownerAccountId).id;
   }
   if (!parentId.isZero()) {
-    node.parent = getNode(parentId).id;
+    const parent = getNode(parentId);
+    node.parent = parent.id;
+    parent.childrenCount += 1;
+    parent.save();
   }
   if (!accessNodeId.isZero()) {
-    node.accessNode = getNode(accessNodeId).id;
+    const accessNode = getNode(accessNodeId);
+    node.accessNode = accessNode.id;
+    accessNode.accessChildrenCount += 1;
+    accessNode.save();
   }
+
+  node.childrenCount = 0;
+  node.accessChildrenCount = 0;
+  node.authorizedNodeManagerCount = 0;
+  node.sequenceCount = 0;
 
   node.createdAtTimestamp = timestamp;
   node.save();
@@ -65,12 +75,16 @@ export function handleAuthorizedManagerSet(event: AuthorizedManagerSet): void {
 
   if (existing && !event.params.isAuthorized) {
     store.remove("AuthorizedNodeManager", id);
+    node.authorizedNodeManagerCount -= 1;
+    node.save();
   } else if (!existing && event.params.isAuthorized) {
     const entity = new AuthorizedNodeManager(id);
     entity.node = node.id;
     entity.address = address;
     entity.createdAtTimestamp = event.block.timestamp.toI32();
     entity.save();
+    node.authorizedNodeManagerCount += 1;
+    node.save();
   }
 }
 

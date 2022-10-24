@@ -38,6 +38,11 @@ type Node @entity {
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
 
+  childrenCount: Int!
+  accessChildrenCount: Int!
+  authorizedNodeManagerCount: Int!
+  sequenceCount: Int!
+
   createdAtTimestamp: Int!
 }
 
