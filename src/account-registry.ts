@@ -2,7 +2,7 @@ import { AccountCreated } from "../generated/AccountRegistryDataSource/AccountRe
 import { Account } from "../generated/schema";
 
 export function handleAccountCreated(event: AccountCreated): void {
-  const timestamp = event.block.timestamp.toI32();
+  const timestamp = event.block.timestamp;
   const accountId = event.params.id;
   const id = `account-${accountId.toString()}`;
   const account = new Account(id);

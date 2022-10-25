@@ -42,11 +42,12 @@ export function handleControlNodeSet(event: ControlNodeSet): void {
 export function handleSequenceConfigured(event: SequenceConfigured): void {
   const catalog = getCatalog(event.address);
   const sId = `sequence-${catalog.id}-${event.params.sequenceId.toString()}`;
+  const sequenceData = event.params.sequenceData;
 
   catalog.sequenceCount += 1;
   catalog.save();
 
-  const node = getNode(event.params.dropId);
+  const node = getNode(sequenceData.dropId);
   node.sequenceCount += 1;
   node.save();
 
@@ -54,12 +55,16 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
   sequence.catalog = catalog.id;
   sequence.sequenceId = event.params.sequenceId;
   sequence.dropNode = node.id;
-  sequence.engineAddress = event.params.engine.toHexString();
-  sequence.createdAtTimestamp = event.block.timestamp.toI32();
+  sequence.engineAddress = sequenceData.engine.toHexString();
+  sequence.createdAtTimestamp = event.block.timestamp;
   sequence.recordCount = 0;
+  sequence.maxSupply = sequenceData.maxSupply;
+  sequence.sealedAfterTimestamp = sequenceData.sealedAfterTimestamp;
+  sequence.sealedBeforeTimestamp = sequenceData.sealedBeforeTimestamp;
+  sequence.engineData = event.params.engineData.toHexString();
 
-  sequence.dropNode = getNode(event.params.dropId).id;
-  sequence.engineAddress = event.params.engine.toHexString();
+  sequence.dropNode = getNode(sequenceData.dropId).id;
+  sequence.engineAddress = sequenceData.engine.toHexString();
   sequence.save();
 }
 
@@ -85,7 +90,7 @@ export function handleRecordCreated(event: RecordCreated): void {
   record.dropNode = sequence.dropNode;
   record.data = event.params.data;
   record.etching = event.params.etching;
-  record.createdAtTimestamp = event.block.timestamp.toI32();
+  record.createdAtTimestamp = event.block.timestamp;
 
   const collection = Catalog.bind(event.address);
   record.ownerAddress = collection.ownerOf(record.tokenId).toHexString();

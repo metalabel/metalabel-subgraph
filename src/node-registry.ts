@@ -29,7 +29,7 @@ const nodeTypeToEnum = (type: i32): string => {
 };
 
 export function handleNodeCreated(event: NodeCreated): void {
-  const timestamp = event.block.timestamp.toI32();
+  const timestamp = event.block.timestamp;
   const nodeId = event.params.id;
   const nodeType = event.params.nodeType;
   const ownerAccountId = event.params.owner;
@@ -83,7 +83,7 @@ export function handleAuthorizedManagerSet(event: AuthorizedManagerSet): void {
     const entity = new AuthorizedNodeManager(id);
     entity.node = node.id;
     entity.address = address;
-    entity.createdAtTimestamp = event.block.timestamp.toI32();
+    entity.createdAtTimestamp = event.block.timestamp;
     entity.save();
     node.authorizedNodeManagerCount += 1;
     node.save();

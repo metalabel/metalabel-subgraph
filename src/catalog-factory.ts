@@ -3,7 +3,7 @@ import { Catalog } from "../generated/schema";
 import { CatalogDataSource } from "../generated/templates";
 
 export function handleCatalogCreated(event: CatalogCreated): void {
-  const timestamp = event.block.timestamp.toI32();
+  const timestamp = event.block.timestamp;
   const address = event.params.catalog;
   const id = `catalog-${address.toHexString()}`;
   const catalog = new Catalog(id);

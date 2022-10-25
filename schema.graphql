@@ -8,7 +8,7 @@ type Account @entity {
 
   ownedNodes: [Node!]! @derivedFrom(field: "owner")
 
-  createdAtTimestamp: Int!
+  createdAtTimestamp: BigInt!
 }
 
 enum NodeType {
@@ -32,7 +32,6 @@ type Node @entity {
   accessNode: Node
 
   catalogs: [Catalog!]! @derivedFrom(field: "controlNode")
-
   children: [Node!]! @derivedFrom(field: "parent")
   accessChildren: [Node!]! @derivedFrom(field: "accessNode")
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
@@ -46,7 +45,7 @@ type Node @entity {
   sequenceCount: Int!
   recordCount: Int!
 
-  createdAtTimestamp: Int!
+  createdAtTimestamp: BigInt!
 }
 
 type AuthorizedNodeManager @entity {
@@ -54,7 +53,7 @@ type AuthorizedNodeManager @entity {
   node: Node!
   address:  String!
 
-  createdAtTimestamp: Int!
+  createdAtTimestamp: BigInt!
 }
 
 type Catalog @entity {
@@ -65,7 +64,7 @@ type Catalog @entity {
   ownerAddress: String!
   controlNode: Node!
 
-  createdAtTimestamp: Int!
+  createdAtTimestamp: BigInt!
 
   recordCount: Int!
   sequenceCount: Int!
@@ -85,7 +84,7 @@ type Record @entity {
   catalog: Catalog! # denormalized, sequence -> catalog
   dropNode: Node! # denormalized, sequence -> dropNode
 
-  createdAtTimestamp: Int!
+  createdAtTimestamp: BigInt!
 }
 
 type Sequence @entity {
@@ -94,8 +93,12 @@ type Sequence @entity {
   sequenceId: Int!
   dropNode: Node!
   engineAddress: String!
+  maxSupply: BigInt # null if none
+  sealedBeforeTimestamp: BigInt!
+  sealedAfterTimestamp: BigInt!
+  engineData: String!
 
-  createdAtTimestamp: Int!
+  createdAtTimestamp: BigInt!
 
   recordCount: Int!
 
