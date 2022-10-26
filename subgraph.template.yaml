@@ -21,6 +21,12 @@ dataSources:
     eventHandlers:
     - event: AccountCreated(indexed uint80,indexed address,address,string)
       handler: handleAccountCreated
+    - event: AccountBroadcast(indexed uint80,string,string)
+      handler: handleAccountBroadcast
+    - event: AccountTransfered(indexed uint80,address)
+      handler: handleAccountTransfered
+    - event: AccountRecoverySet(indexed uint80,address)
+      handler: handleAccountRecoverySet
 - name: SimpleNameAuthorityDataSource
   kind: ethereum/contract
   network: {{network}}
