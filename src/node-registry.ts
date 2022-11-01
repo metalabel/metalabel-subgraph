@@ -66,6 +66,7 @@ export function handleNodeCreated(event: NodeCreated): void {
   node.recordCount = 0;
 
   node.createdAtTimestamp = timestamp;
+  node.createdAtTransaction = event.transaction.hash;
   node.save();
 }
 
@@ -84,6 +85,7 @@ export function handleAuthorizedManagerSet(event: AuthorizedManagerSet): void {
     entity.node = node.id;
     entity.address = address;
     entity.createdAtTimestamp = event.block.timestamp;
+    entity.createdAtTransaction = event.transaction.hash;
     entity.save();
     node.authorizedNodeManagerCount += 1;
     node.save();

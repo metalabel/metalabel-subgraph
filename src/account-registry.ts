@@ -16,6 +16,7 @@ export function handleAccountCreated(event: AccountCreated): void {
   account.address = event.params.subject.toHexString();
   account.recoveryAddress = event.params.recovery.toHexString();
   account.createdAtTimestamp = timestamp;
+  account.createdAtTransaction = event.transaction.hash;
   account.metadata = event.params.metadata;
   account.save();
 }

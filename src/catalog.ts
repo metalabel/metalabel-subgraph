@@ -57,6 +57,7 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
   sequence.dropNode = node.id;
   sequence.engineAddress = sequenceData.engine.toHexString();
   sequence.createdAtTimestamp = event.block.timestamp;
+  sequence.createdAtTransaction = event.transaction.hash;
   sequence.recordCount = 0;
   sequence.maxSupply = sequenceData.maxSupply;
   sequence.sealedAfterTimestamp = sequenceData.sealedAfterTimestamp;
@@ -91,6 +92,7 @@ export function handleRecordCreated(event: RecordCreated): void {
   record.data = event.params.data;
   record.etching = event.params.etching;
   record.createdAtTimestamp = event.block.timestamp;
+  record.createdAtTransaction = event.transaction.hash;
 
   const collection = Catalog.bind(event.address);
   record.ownerAddress = collection.ownerOf(record.tokenId).toHexString();
