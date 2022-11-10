@@ -38,6 +38,7 @@ type Node @entity {
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
   records: [Record!]! @derivedFrom(field: "dropNode")
+  splits: [Split!]! @derivedFrom(field: "controlNode")
 
   catalogCount: Int!
   childrenCount: Int!
@@ -45,6 +46,7 @@ type Node @entity {
   authorizedNodeManagerCount: Int!
   sequenceCount: Int!
   recordCount: Int!
+  splitCount: Int!
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
@@ -109,4 +111,16 @@ type Sequence @entity {
   recordCount: Int!
 
   records: [Record!]! @derivedFrom(field: "sequence")
+}
+
+type Split @entity {
+  id: ID!
+  address: String!
+  controlNode: Node!
+  metadata: String!
+  recipientAddresses: [String!]! # parallel array w below
+  recipientAllocations: [Int!]! # raw values from 0xsplit, 1e6 = 100%
+
+  createdAtTimestamp: BigInt!
+  createdAtTransaction: Bytes!
 }
