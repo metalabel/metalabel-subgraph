@@ -52,10 +52,10 @@ export function handleNodeCreated(event: NodeCreated): void {
     parent.save();
   }
   if (!groupNodeId.isZero()) {
-    const accessNode = getNode(groupNodeId);
-    node.groupNode = accessNode.id;
-    accessNode.groupChildrenCount += 1;
-    accessNode.save();
+    const groupNode = getNode(groupNodeId);
+    node.groupNode = groupNode.id;
+    groupNode.groupChildrenCount += 1;
+    groupNode.save();
   }
 
   node.collectionCount = 0;

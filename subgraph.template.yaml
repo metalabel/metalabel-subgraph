@@ -69,25 +69,27 @@ dataSources:
       handler: handleControllerSet
     - event: NodeBroadcast(indexed uint64,string,string)
       handler: handleNodeBroadcast
-# - name: CatalogFactoryDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     address: "{{CatalogFactory}}"
-#     abi: CatalogFactory
-#     startBlock: {{startBlock}}
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/catalog-factory.ts
-#     entities: [ ]
-#     abis:
-#     - name: CatalogFactory
-#       file: ./abis/CatalogFactory.json
-#     eventHandlers:
-#     - event: CatalogCreated(indexed address,string,string)
-#       handler: handleCatalogCreated
+- name: CollectionFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{CollectionFactory}}"
+    abi: CollectionFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/collection-factory.ts
+    entities: [ ]
+    abis:
+    - name: CollectionFactory
+      file: ./abis/CollectionFactory.json
+    - name: Collection
+      file: ./abis/Collection.json
+    eventHandlers:
+    - event: CollectionCreated(indexed address,string,string)
+      handler: handleCollectionCreated
 # - name: SplitFactoryDataSource
 #   kind: ethereum/contract
 #   network: {{network}}
@@ -107,29 +109,27 @@ dataSources:
 #     eventHandlers:
 #     - event: SplitCreated(indexed address,uint64,address[],uint32[],string)
 #       handler: handleSplitCreated
-# templates:
-# - name: CatalogDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     abi: Catalog
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/catalog.ts
-#     entities: [ ]
-#     abis:
-#     - name: Catalog
-#       file: ./abis/Catalog.json
-#     eventHandlers:
-#     - event: ControlNodeSet(indexed uint64)
-#       handler: handleControlNodeSet
-#     - event: OwnershipTransferred(indexed address,indexed address)
-#       handler: handleOwnershipTransferred
-#     - event: SequenceConfigured(indexed uint16,(uint64,address,uint64,uint64,uint64,uint64),bytes)
-#       handler: handleSequenceConfigured
-#     - event: RecordCreated(indexed uint256,indexed uint16,uint64,string)
-#       handler: handleRecordCreated
-#     - event: Transfer(indexed address,indexed address,indexed uint256)
-#       handler: handleTransfer
+templates:
+- name: CollectionDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    abi: Collection
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/collection.ts
+    entities: [ ]
+    abis:
+    - name: Collection
+      file: ./abis/Collection.json
+    eventHandlers:
+    - event: OwnershipTransferred(indexed address,indexed address)
+      handler: handleOwnershipTransferred
+    - event: SequenceConfigured(indexed uint16,(address,uint64,uint64,uint64,uint64,uint64),bytes)
+      handler: handleSequenceConfigured
+    - event: RecordCreated(indexed uint256,indexed uint16,uint64,string)
+      handler: handleRecordCreated
+    - event: Transfer(indexed address,indexed address,indexed uint256)
+      handler: handleTransfer
