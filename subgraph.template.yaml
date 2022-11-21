@@ -90,25 +90,25 @@ dataSources:
     eventHandlers:
     - event: CollectionCreated(indexed address,string,string)
       handler: handleCollectionCreated
-# - name: SplitFactoryDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     address: "{{SplitFactory}}"
-#     abi: SplitFactory
-#     startBlock: {{startBlock}}
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/split-factory.ts
-#     entities: [ ]
-#     abis:
-#     - name: SplitFactory
-#       file: ./abis/SplitFactory.json
-#     eventHandlers:
-#     - event: SplitCreated(indexed address,uint64,address[],uint32[],string)
-#       handler: handleSplitCreated
+- name: SplitFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{SplitFactory}}"
+    abi: SplitFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/split-factory.ts
+    entities: [ ]
+    abis:
+    - name: SplitFactory
+      file: ./abis/SplitFactory.json
+    eventHandlers:
+    - event: SplitCreated(indexed address,uint64,address[],uint32[],string)
+      handler: handleSplitCreated
 templates:
 - name: CollectionDataSource
   kind: ethereum/contract
