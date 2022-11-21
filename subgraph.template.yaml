@@ -46,29 +46,29 @@ dataSources:
     eventHandlers:
     - event: NameRegistered(string,uint64)
       handler: handleNameRegistered
-# - name: NodeRegistryDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     address: "{{NodeRegistry}}"
-#     abi: NodeRegistry
-#     startBlock: {{startBlock}}
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/node-registry.ts
-#     entities: [ ]
-#     abis:
-#     - name: NodeRegistry
-#       file: ./abis/NodeRegistry.json
-#     eventHandlers:
-#     - event: NodeCreated(indexed uint64,indexed uint16,indexed uint64,uint64,uint64,string)
-#       handler: handleNodeCreated
-#     - event: NodeControllerSet(indexed uint64,indexed address,bool)
-#       handler: handleControllerSet
-#     - event: NodeBroadcast(indexed uint64,string,string)
-#       handler: handleNodeBroadcast
+- name: NodeRegistryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{NodeRegistry}}"
+    abi: NodeRegistry
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/node-registry.ts
+    entities: [ ]
+    abis:
+    - name: NodeRegistry
+      file: ./abis/NodeRegistry.json
+    eventHandlers:
+    - event: NodeCreated(indexed uint64,indexed uint16,indexed uint64,uint64,uint64,string)
+      handler: handleNodeCreated
+    - event: NodeControllerSet(indexed uint64,indexed address,bool)
+      handler: handleControllerSet
+    - event: NodeBroadcast(indexed uint64,string,string)
+      handler: handleNodeBroadcast
 # - name: CatalogFactoryDataSource
 #   kind: ethereum/contract
 #   network: {{network}}

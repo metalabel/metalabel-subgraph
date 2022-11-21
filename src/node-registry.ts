@@ -1,9 +1,9 @@
 import {
-  AuthorizedManagerSet,
+  NodeControllerSet,
   NodeBroadcast,
   NodeCreated,
 } from "../generated/NodeRegistryDataSource/NodeRegistry";
-import { Node, AuthorizedNodeManager } from "../generated/schema";
+import { Node, NodeController } from "../generated/schema";
 import { getAccount, getNode } from "./entities";
 import { store } from "@graphprotocol/graph-ts";
 
@@ -34,7 +34,7 @@ export function handleNodeCreated(event: NodeCreated): void {
   const nodeType = event.params.nodeType;
   const ownerAccountId = event.params.owner;
   const parentId = event.params.parent;
-  const accessNodeId = event.params.accessNode;
+  const groupNodeId = event.params.groupNode;
 
   const id = `node-${nodeId.toString()}`;
   const node = new Node(id);
@@ -51,17 +51,17 @@ export function handleNodeCreated(event: NodeCreated): void {
     parent.childrenCount += 1;
     parent.save();
   }
-  if (!accessNodeId.isZero()) {
-    const accessNode = getNode(accessNodeId);
-    node.accessNode = accessNode.id;
-    accessNode.accessChildrenCount += 1;
+  if (!groupNodeId.isZero()) {
+    const accessNode = getNode(groupNodeId);
+    node.groupNode = accessNode.id;
+    accessNode.groupChildrenCount += 1;
     accessNode.save();
   }
 
-  node.catalogCount = 0;
+  node.collectionCount = 0;
   node.childrenCount = 0;
-  node.accessChildrenCount = 0;
-  node.authorizedNodeManagerCount = 0;
+  node.groupChildrenCount = 0;
+  node.controllerCount = 0;
   node.sequenceCount = 0;
   node.recordCount = 0;
   node.splitCount = 0;
@@ -71,24 +71,24 @@ export function handleNodeCreated(event: NodeCreated): void {
   node.save();
 }
 
-export function handleAuthorizedManagerSet(event: AuthorizedManagerSet): void {
+export function handleControllerSet(event: NodeControllerSet): void {
   const node = getNode(event.params.id);
-  const address = event.params.manager.toHexString();
-  const id = `authorized-node-manager-${node.id}-${address}`;
-  const existing = AuthorizedNodeManager.load(id);
+  const address = event.params.controller.toHexString();
+  const id = `node-controller-${node.id}-${address}`;
+  const existing = NodeController.load(id);
 
   if (existing && !event.params.isAuthorized) {
-    store.remove("AuthorizedNodeManager", id);
-    node.authorizedNodeManagerCount -= 1;
+    store.remove("NodeController", id);
+    node.controllerCount -= 1;
     node.save();
   } else if (!existing && event.params.isAuthorized) {
-    const entity = new AuthorizedNodeManager(id);
+    const entity = new NodeController(id);
     entity.node = node.id;
     entity.address = address;
     entity.createdAtTimestamp = event.block.timestamp;
     entity.createdAtTransaction = event.transaction.hash;
     entity.save();
-    node.authorizedNodeManagerCount += 1;
+    node.controllerCount += 1;
     node.save();
   }
 }

@@ -2,5 +2,6 @@
   "network": "goerli",
   "startBlock": "7993355",
   "AccountRegistry": "0x5D7D440E3720ef206794eD49B1eF6Af83711D1d7",
-  "SimpleNameAuthority": "0x12aCAc4C6eED395A675c3B9963255338b5343b1F"
+  "SimpleNameAuthority": "0x12aCAc4C6eED395A675c3B9963255338b5343b1F",
+  "NodeRegistry": "0x4F794Fdc4779Dcc9bD34F3d7b35d56408609E40D"
 }

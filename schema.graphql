@@ -30,20 +30,20 @@ type Node @entity {
   metadata: String!
   owner: Account
   parent: Node
-  accessNode: Node
+  groupNode: Node
 
   collections: [Collection!]! @derivedFrom(field: "controlNode")
   children: [Node!]! @derivedFrom(field: "parent")
-  accessChildren: [Node!]! @derivedFrom(field: "accessNode")
-  authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
+  groupChildren: [Node!]! @derivedFrom(field: "groupNode")
+  controllers: [NodeController!]! @derivedFrom(field: "node")
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
   records: [Record!]! @derivedFrom(field: "dropNode")
   splits: [Split!]! @derivedFrom(field: "controlNode")
 
   collectionCount: Int!
   childrenCount: Int!
-  accessChildrenCount: Int!
-  authorizedNodeManagerCount: Int!
+  groupChildrenCount: Int!
+  controllerCount: Int!
   sequenceCount: Int!
   recordCount: Int!
   splitCount: Int!
@@ -52,7 +52,7 @@ type Node @entity {
   createdAtTransaction: Bytes!
 }
 
-type AuthorizedNodeManager @entity {
+type NodeController @entity {
   id: ID!
   node: Node!
   address:  String!
