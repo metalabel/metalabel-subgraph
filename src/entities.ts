@@ -1,5 +1,11 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { Node, Account, Catalog, Sequence, Record } from "../generated/schema";
+import {
+  Node,
+  Account,
+  Collection,
+  Sequence,
+  Record,
+} from "../generated/schema";
 
 export const getNodeById = (id: string): Node => {
   const node = Node.load(id);
@@ -19,25 +25,28 @@ export const getAccount = (accountId: BigInt): Account => {
   return account;
 };
 
-export const getCatalog = (address: Address): Catalog => {
-  const id = `catalog-${address.toHexString()}`;
-  const catalog = Catalog.load(id);
-  if (!catalog) throw new Error(`Catalog ${id} not found`);
-  return catalog;
+export const getCollection = (address: Address): Collection => {
+  const id = `collection-${address.toHexString()}`;
+  const collection = Collection.load(id);
+  if (!collection) throw new Error(`Collection ${id} not found`);
+  return collection;
 };
 
-export const getSequence = (catalogId: string, sequenceId: i32): Sequence => {
-  const id = `sequence-${catalogId}-${sequenceId.toString()}`;
+export const getSequence = (
+  collectionId: string,
+  sequenceId: i32
+): Sequence => {
+  const id = `sequence-${collectionId}-${sequenceId.toString()}`;
   const sequence = Sequence.load(id);
   if (!sequence) throw new Error(`Sequence ${id} not found`);
   return sequence;
 };
 
 export const getRecordOrNull = (
-  catalogId: string,
+  collectionId: string,
   tokenId: BigInt
 ): Record | null => {
-  const id = `record-${catalogId}-${tokenId.toString()}`;
+  const id = `record-${collectionId}-${tokenId.toString()}`;
   const record = Record.load(id);
   return record;
 };

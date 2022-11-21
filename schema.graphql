@@ -32,7 +32,7 @@ type Node @entity {
   parent: Node
   accessNode: Node
 
-  catalogs: [Catalog!]! @derivedFrom(field: "controlNode")
+  collections: [Collection!]! @derivedFrom(field: "controlNode")
   children: [Node!]! @derivedFrom(field: "parent")
   accessChildren: [Node!]! @derivedFrom(field: "accessNode")
   authorizedNodeManagers: [AuthorizedNodeManager!]! @derivedFrom(field: "node")
@@ -40,7 +40,7 @@ type Node @entity {
   records: [Record!]! @derivedFrom(field: "dropNode")
   splits: [Split!]! @derivedFrom(field: "controlNode")
 
-  catalogCount: Int!
+  collectionCount: Int!
   childrenCount: Int!
   accessChildrenCount: Int!
   authorizedNodeManagerCount: Int!
@@ -61,7 +61,7 @@ type AuthorizedNodeManager @entity {
   createdAtTransaction: Bytes!
 }
 
-type Catalog @entity {
+type Collection @entity {
   id: ID!
   address: String!
   name: String!
@@ -75,8 +75,8 @@ type Catalog @entity {
   recordCount: Int!
   sequenceCount: Int!
 
-  records: [Record!]! @derivedFrom(field: "catalog")
-  sequences: [Sequence!]! @derivedFrom(field: "catalog")
+  records: [Record!]! @derivedFrom(field: "collection")
+  sequences: [Sequence!]! @derivedFrom(field: "collection")
 }
 
 type Record @entity {
@@ -87,7 +87,7 @@ type Record @entity {
   ownerAddress: String!
   data: BigInt!
 
-  catalog: Catalog! # denormalized, sequence -> catalog
+  collection: Collection! # denormalized, sequence -> ccollection
   dropNode: Node! # denormalized, sequence -> dropNode
 
   createdAtTimestamp: BigInt!
@@ -96,7 +96,7 @@ type Record @entity {
 
 type Sequence @entity {
   id: ID!
-  catalog: Catalog!
+  collection: Collection!
   sequenceId: Int!
   dropNode: Node!
   engineAddress: String!
