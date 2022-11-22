@@ -39,6 +39,7 @@ type Node @entity {
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
   records: [Record!]! @derivedFrom(field: "dropNode")
   splits: [Split!]! @derivedFrom(field: "controlNode")
+  waterfalls: [Split!]! @derivedFrom(field: "controlNode")
 
   collectionCount: Int!
   childrenCount: Int!
@@ -47,6 +48,7 @@ type Node @entity {
   sequenceCount: Int!
   recordCount: Int!
   splitCount: Int!
+  waterfallCount: Int!
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
@@ -120,6 +122,20 @@ type Split @entity {
   metadata: String!
   recipientAddresses: [String!]! # parallel array w below
   recipientAllocations: [Int!]! # raw values from 0xsplit, 1e6 = 100%
+
+  createdAtTimestamp: BigInt!
+  createdAtTransaction: Bytes!
+}
+
+type Waterfall @entity {
+  id: ID!
+  address: String!
+  controlNode: Node!
+  metadata: String!
+  recipientAddresses: [String!]! # all recipients, including residual address
+  recipientThresholds: [BigInt!]! # should have length 1 less than recipient array
+  nonWaterfallRecipientAddress: String!
+  tokenAddress: String # if null, waterfall is in native ETH
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
