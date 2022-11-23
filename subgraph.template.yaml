@@ -109,6 +109,25 @@ dataSources:
     eventHandlers:
     - event: SplitCreated(indexed address,uint64,address[],uint32[],string)
       handler: handleSplitCreated
+- name: WaterfallFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{WaterfallFactory}}"
+    abi: WaterfallFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/waterfall-factory.ts
+    entities: [ ]
+    abis:
+    - name: WaterfallFactory
+      file: ./abis/WaterfallFactory.json
+    eventHandlers:
+    - event: WaterfallCreated(indexed address,uint64,address,address,address[],uint256[],string)
+      handler: handleWaterfallCreated
 templates:
 - name: CollectionDataSource
   kind: ethereum/contract
