@@ -13,6 +13,8 @@ export function handleWaterfallCreated(event: WaterfallCreated): void {
   waterfall.address = address.toHexString();
   waterfall.controlNode = node.id;
   waterfall.metadata = event.params.metadata;
+  waterfall.nonWaterfallRecipientAddress = event.params.nonWaterfallRecipient.toHexString();
+  waterfall.tokenAddress = event.params.token.toHexString();
 
   waterfall.recipientAddresses = event.params.recipients.map<string>((a) =>
     a.toHexString()
