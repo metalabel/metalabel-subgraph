@@ -1,3 +1,4 @@
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Waterfall } from "../generated/schema";
 import { WaterfallCreated } from "../generated/WaterfallFactoryDataSource/WaterfallFactory";
 import { getNode } from "./entities";
@@ -14,7 +15,12 @@ export function handleWaterfallCreated(event: WaterfallCreated): void {
   waterfall.controlNode = node.id;
   waterfall.metadata = event.params.metadata;
   waterfall.nonWaterfallRecipientAddress = event.params.nonWaterfallRecipient.toHexString();
-  waterfall.tokenAddress = event.params.token.toHexString();
+
+  // if token is zero address -> its ETH, leave tokenAddress as null
+  const tokenAddress = event.params.token;
+  if (!tokenAddress.equals(Address.zero())) {
+    waterfall.tokenAddress = event.params.token.toHexString();
+  }
 
   waterfall.recipientAddresses = event.params.recipients.map<string>((a) =>
     a.toHexString()
