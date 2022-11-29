@@ -27,48 +27,35 @@ dataSources:
       handler: handleAccountTransfered
     - event: AccountIssuerSet(indexed address,bool)
       handler: handleAccountIssuerSet
-# - name: SimpleNameAuthorityDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     address: "{{SimpleNameAuthority}}"
-#     abi: SimpleNameAuthority
-#     startBlock: {{startBlock}}
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/simple-name-authority.ts
-#     entities: [ ]
-#     abis:
-#     - name: SimpleNameAuthority
-#       file: ./abis/SimpleNameAuthority.json
-#     eventHandlers:
-#     - event: NameRegistered(string,uint64)
-#       handler: handleNameRegistered
-# - name: NodeRegistryDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     address: "{{NodeRegistry}}"
-#     abi: NodeRegistry
-#     startBlock: {{startBlock}}
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/node-registry.ts
-#     entities: [ ]
-#     abis:
-#     - name: NodeRegistry
-#       file: ./abis/NodeRegistry.json
-#     eventHandlers:
-#     - event: NodeCreated(indexed uint64,indexed uint16,indexed uint64,uint64,uint64,string)
-#       handler: handleNodeCreated
-#     - event: NodeControllerSet(indexed uint64,indexed address,bool)
-#       handler: handleControllerSet
-#     - event: NodeBroadcast(indexed uint64,string,string)
-#       handler: handleNodeBroadcast
+- name: NodeRegistryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{NodeRegistry}}"
+    abi: NodeRegistry
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/node-registry.ts
+    entities: [ ]
+    abis:
+    - name: NodeRegistry
+      file: ./abis/NodeRegistry.json
+    eventHandlers:
+    - event: NodeCreated(indexed uint64,indexed uint16,indexed uint64,uint64,uint64,string)
+      handler: handleNodeCreated
+    - event: NodeOwnerSet(indexed uint64,indexed uint64)
+      handler: handleNodeOwnerSet
+    - event: NodeParentSet(indexed uint64,indexed uint64)
+      handler: handleNodeParentSet
+    - event: NodeGroupNodeSet(indexed uint64,indexed uint64)
+      handler: handleNodeGroupNodeSet
+    - event: NodeBroadcast(indexed uint64,string,string)
+      handler: handleNodeBroadcast
+    - event: NodeControllerSet(indexed uint64,indexed address,bool)
+      handler: handleControllerSet
 # - name: CollectionFactoryDataSource
 #   kind: ethereum/contract
 #   network: {{network}}

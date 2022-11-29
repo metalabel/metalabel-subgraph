@@ -3,7 +3,6 @@ type Account @entity {
   accountId: BigInt!
   address: String!
   metadata: String!
-  username: String
 
   ownedNodes: [Node!]! @derivedFrom(field: "owner")
 

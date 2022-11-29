@@ -2,6 +2,9 @@ import {
   NodeControllerSet,
   NodeBroadcast,
   NodeCreated,
+  NodeOwnerSet,
+  NodeGroupNodeSet,
+  NodeParentSet,
 } from "../generated/NodeRegistryDataSource/NodeRegistry";
 import { Node, NodeController } from "../generated/schema";
 import { getAccount, getNode } from "./entities";
@@ -91,4 +94,22 @@ export function handleNodeBroadcast(event: NodeBroadcast): void {
     node.metadata = event.params.message;
     node.save();
   }
+}
+
+export function handleNodeOwnerSet(event: NodeOwnerSet): void {
+  const node = getNode(event.params.id);
+  node.owner = getAccount(event.params.owner).id;
+  node.save();
+}
+
+export function handleNodeParentSet(event: NodeParentSet): void {
+  const node = getNode(event.params.id);
+  node.parent = getNode(event.params.parent).id;
+  node.save();
+}
+
+export function handleGroupNodeSet(event: NodeGroupNodeSet): void {
+  const node = getNode(event.params.id);
+  node.groupNode = getNode(event.params.groupNode).id;
+  node.save();
 }
