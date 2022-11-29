@@ -18,7 +18,7 @@
     {
       "id": "network",
       "description": "Network Name (eg goerl, mainnet, etc)",
-      "default": "goerli",
+      "default": "goerli-next",
       "type": "promptString"
     },
   ]

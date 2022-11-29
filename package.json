@@ -8,8 +8,8 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "prepare": "mustache config/${NETWORK:-goerli}.json subgraph.template.yaml > subgraph.yaml",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ metalabel/metalabel-${NETWORK:-goerli}"
+    "prepare": "mustache config/${NETWORK:-goerli-next}.json subgraph.template.yaml > subgraph.yaml",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ metalabel/metalabel-${NETWORK:-goerli-next}"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.35.0",
