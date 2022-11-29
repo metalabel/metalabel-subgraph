@@ -1,10 +1,11 @@
+import { store } from "@graphprotocol/graph-ts";
 import {
   AccountBroadcast,
   AccountCreated,
-  AccountRecoverySet,
+  AccountIssuerSet,
   AccountTransfered,
 } from "../generated/AccountRegistryDataSource/AccountRegistry";
-import { Account } from "../generated/schema";
+import { Account, AuthorizedAccountIssuer } from "../generated/schema";
 import { getAccount } from "./entities";
 
 export function handleAccountCreated(event: AccountCreated): void {
@@ -14,7 +15,6 @@ export function handleAccountCreated(event: AccountCreated): void {
   const account = new Account(id);
   account.accountId = accountId;
   account.address = event.params.subject.toHexString();
-  account.recoveryAddress = event.params.recovery.toHexString();
   account.createdAtTimestamp = timestamp;
   account.createdAtTransaction = event.transaction.hash;
   account.metadata = event.params.metadata;
@@ -36,8 +36,21 @@ export function handleAccountTransfered(event: AccountTransfered): void {
   account.save();
 }
 
-export function handleAccountRecoverySet(event: AccountRecoverySet): void {
-  const account = getAccount(event.params.id);
-  account.recoveryAddress = event.params.newRecoveryAddress.toHexString();
-  account.save();
+export function handleAccountIssuerSet(event: AccountIssuerSet): void {
+  const address = event.params.issuer;
+  const id = `authorized-account-issuer-${address.toHexString()}`;
+  const existing = AuthorizedAccountIssuer.load(id);
+
+  // there and removed -> delete
+  if (existing && !event.params.authorized) {
+    store.remove("AuthorizedAccountIssuer", id);
+  }
+  // not there and added -> create
+  else if (!existing && event.params.authorized) {
+    const entity = new AuthorizedAccountIssuer(id);
+    entity.address = address.toHexString();
+    entity.createdAtTimestamp = event.block.timestamp;
+    entity.createdAtTransaction = event.transaction.hash;
+    entity.save();
+  }
 }

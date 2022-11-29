@@ -12,17 +12,7 @@ const nodeTypeToEnum = (type: i32): string => {
     case 1:
       return "METALABEL";
     case 2:
-      return "SQUAD";
-    case 3:
       return "RELEASE";
-    case 4:
-      return "DROP";
-    case 5:
-      return "TREASURY";
-    case 6:
-      return "SPLIT";
-    case 7:
-      return "REALM";
     default:
       return "UNKNOWN";
   }

@@ -2,7 +2,6 @@ type Account @entity {
   id: ID!
   accountId: BigInt!
   address: String!
-  recoveryAddress: String!
   metadata: String!
   username: String
 
@@ -12,15 +11,18 @@ type Account @entity {
   createdAtTransaction: Bytes!
 }
 
+type AuthorizedAccountIssuer @entity {
+  id: ID!
+  address: String!
+
+  createdAtTimestamp: BigInt!
+  createdAtTransaction: Bytes!
+}
+
 enum NodeType {
   UNKNOWN
   METALABEL
-  SQUAD
   RELEASE
-  DROP
-  TREASURY
-  SPLIT
-  REALM
 }
 
 type Node @entity {
