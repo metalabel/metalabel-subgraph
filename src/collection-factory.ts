@@ -18,10 +18,10 @@ export function handleCollectionCreated(event: CollectionCreated): void {
   collection.name = event.params.name;
   collection.symbol = event.params.symbol;
   collection.ownerAddress = ""; // will be set in handleOwnershipTransferred
-  collection.createdAtTimestamp = timestamp;
-  collection.createdAtTransaction = event.transaction.hash;
   collection.recordCount = 0;
   collection.sequenceCount = 0;
+  collection.createdAtTimestamp = timestamp;
+  collection.createdAtTransaction = event.transaction.hash;
   collection.save();
 
   // spawn new datasource for this catalog

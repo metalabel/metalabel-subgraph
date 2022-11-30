@@ -45,8 +45,6 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
   sequence.sealedBeforeTimestamp = sequenceData.sealedBeforeTimestamp;
   sequence.engineData = event.params.engineData.toHexString();
 
-  sequence.dropNode = getNode(sequenceData.dropNodeId).id;
-  sequence.engineAddress = sequenceData.engine.toHexString();
   sequence.save();
 }
 
@@ -71,7 +69,6 @@ export function handleRecordCreated(event: RecordCreated): void {
   record.sequence = sequence.id;
   record.dropNode = sequence.dropNode;
   record.data = event.params.data;
-  record.etching = event.params.etching;
   record.createdAtTimestamp = event.block.timestamp;
   record.createdAtTransaction = event.transaction.hash;
 

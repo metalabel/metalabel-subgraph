@@ -15,9 +15,9 @@ export function handleAccountCreated(event: AccountCreated): void {
   const account = new Account(id);
   account.accountId = accountId;
   account.address = event.params.subject.toHexString();
+  account.metadata = event.params.metadata;
   account.createdAtTimestamp = timestamp;
   account.createdAtTransaction = event.transaction.hash;
-  account.metadata = event.params.metadata;
   account.save();
 }
 

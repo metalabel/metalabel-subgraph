@@ -86,7 +86,6 @@ type Record @entity {
   id: ID!
   tokenId: BigInt!
   sequence: Sequence!
-  etching: String!
   ownerAddress: String!
   data: BigInt!
 
