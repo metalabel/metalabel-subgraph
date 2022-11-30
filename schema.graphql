@@ -112,6 +112,12 @@ type Sequence @entity {
 
   recordCount: Int!
 
+  # only present for drop engine sequences
+  unitPrice: BigInt # in gwei
+  revenueRecipient: String
+  royaltyBps: Int
+  uriPrefix: String
+
   records: [Record!]! @derivedFrom(field: "sequence")
 }
 

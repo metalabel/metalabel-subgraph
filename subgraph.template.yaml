@@ -77,6 +77,25 @@ dataSources:
     eventHandlers:
     - event: CollectionCreated(indexed address,string,string)
       handler: handleCollectionCreated
+- name: DropEngineDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{DropEngine}}"
+    abi: DropEngine
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/drop-engine.ts
+    entities: [ ]
+    abis:
+    - name: DropEngine
+      file: ./abis/DropEngine.json
+    eventHandlers:
+    - event: DropCreated(address,uint16,uint80,uint16,address,string)
+      handler: handleDropCreated
 # - name: SplitFactoryDataSource
 #   kind: ethereum/contract
 #   network: {{network}}
