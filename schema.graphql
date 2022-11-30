@@ -113,7 +113,7 @@ type Sequence @entity {
   recordCount: Int!
 
   # only present for drop engine sequences
-  unitPrice: BigInt # in gwei
+  unitPrice: BigInt # in wei
   revenueRecipient: String
   royaltyBps: Int
   uriPrefix: String
