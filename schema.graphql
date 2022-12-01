@@ -117,6 +117,8 @@ type Sequence @entity {
   revenueRecipient: String
   royaltyBps: Int
   uriPrefix: String
+  isPublicMint: Boolean
+  mintAuthority: String # null if public mint
 
   records: [Record!]! @derivedFrom(field: "sequence")
 }

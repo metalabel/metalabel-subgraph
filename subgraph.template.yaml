@@ -94,8 +94,10 @@ dataSources:
     - name: DropEngine
       file: ./abis/DropEngine.json
     eventHandlers:
-    - event: DropCreated(address,uint16,uint80,uint16,address,string)
+    - event: DropCreated(address,uint16,uint80,uint16,address,string,address)
       handler: handleDropCreated
+    - event: PublicMintEnabled(address,uint16)
+      handler: handlePublicMintEnabled
 - name: SplitFactoryDataSource
   kind: ethereum/contract
   network: {{network}}
