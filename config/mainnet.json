@@ -1,0 +1,11 @@
+{
+  "network": "mainnet",
+  "startBlock": "16115935",
+  "AccountRegistry": "0x8384cDfeA9be2e06fE702338089b42CFFcc09D13",
+  "NodeRegistry": "0x6E88E3165aBBe59Ec23076896b0e9D14bEfB941b",
+  "Collection": "0x294B8645C0ff67E116064F3D24F31e6F70b6391e",
+  "CollectionFactory": "0x04EB487f00dE0B9BcCD5ceAECCF6A290B3F54392",
+  "DropEngine": "0xA5c08bD40C717acF009b1c152039910Ac2273389",
+  "SplitFactory": "0x9db31cDd7408dB343d22faFe71b05CC178019251",
+  "WaterfallFactory": "0x92587c36430ba85d9E2f431e50275584B7929DF2"
+}
