@@ -9,7 +9,7 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "prepare": "mustache config/${NETWORK:-goerli}.json subgraph.template.yaml > subgraph.yaml",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ metalabel/metalabel-${NETWORK:-goerli}"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ metalabel/metalabel-v1-1-${NETWORK:-goerli}"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.35.0",
