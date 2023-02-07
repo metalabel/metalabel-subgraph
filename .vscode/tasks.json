@@ -17,9 +17,10 @@
   "inputs": [
     {
       "id": "network",
-      "description": "Network Name (eg goerl, mainnet, etc)",
-      "default": "goerli",
-      "type": "promptString"
+      "type": "pickString",
+      "description": "Network name",
+      "options": ["goerli", "mainnet"],
+      "default": "goerli"
     },
   ]
 }
