@@ -3,7 +3,7 @@ import {
   AccountBroadcast,
   AccountCreated,
   AccountIssuerSet,
-  AccountTransfered,
+  AccountTransferred,
 } from "../generated/AccountRegistryDataSource/AccountRegistry";
 import { Account, AuthorizedAccountIssuer } from "../generated/schema";
 import { getAccount } from "./entities";
@@ -30,7 +30,7 @@ export function handleAccountBroadcast(event: AccountBroadcast): void {
   }
 }
 
-export function handleAccountTransfered(event: AccountTransfered): void {
+export function handleAccountTransferred(event: AccountTransferred): void {
   const account = getAccount(event.params.id);
   account.address = event.params.newOwner.toHexString();
   account.save();
