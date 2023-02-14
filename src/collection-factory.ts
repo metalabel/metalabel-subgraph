@@ -2,7 +2,7 @@ import { CollectionCreated } from "../generated/CollectionFactoryDataSource/Coll
 import { Collection as CollectionContract } from "../generated/templates/CollectionDataSource/Collection";
 import { Collection } from "../generated/schema";
 import { CollectionDataSource } from "../generated/templates";
-import { getNodeById } from "./entities";
+import { getNode } from "./entities";
 
 export function handleCollectionCreated(event: CollectionCreated): void {
   const timestamp = event.block.timestamp;
@@ -10,7 +10,7 @@ export function handleCollectionCreated(event: CollectionCreated): void {
   const id = `collection-${address.toHexString()}`;
   const collection = new Collection(id);
   const collectionContract = CollectionContract.bind(address);
-  const node = getNodeById(collectionContract.controlNode().toString());
+  const node = getNode(collectionContract.controlNode());
 
   collection.address = address.toHexString();
   collection.name = collectionContract.name();
@@ -21,6 +21,8 @@ export function handleCollectionCreated(event: CollectionCreated): void {
   collection.sequenceCount = 0;
   collection.createdAtTimestamp = timestamp;
   collection.createdAtTransaction = event.transaction.hash;
+  collection.recordCount = 0;
+  collection.sequenceCount = 0;
   collection.save();
 
   node.collectionCount++;

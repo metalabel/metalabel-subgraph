@@ -77,6 +77,27 @@ dataSources:
     eventHandlers:
     - event: CollectionCreated(indexed address)
       handler: handleCollectionCreated
+- name: MembershipsFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{MembershipsFactory}}"
+    abi: MembershipsFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/memberships-factory.ts
+    entities: [ ]
+    abis:
+    - name: MembershipsFactory
+      file: ./abis/MembershipsFactory.json
+    - name: Memberships
+      file: ./abis/Memberships.json
+    eventHandlers:
+    - event: MembershipsCreated(indexed address)
+      handler: handleMembershipsCreated
 templates:
 - name: CollectionDataSource
   kind: ethereum/contract
@@ -97,6 +118,25 @@ templates:
       handler: handleRecordCreated
     - event: SequenceConfigured(indexed uint16,(uint64,uint64,uint64,uint64,address,uint64),bytes)
       handler: handleSequenceConfigured
+    - event: Transfer(indexed address,indexed address,indexed uint256)
+      handler: handleTransfer
+    - event: OwnershipTransferred(indexed address,indexed address)
+      handler: handleOwnershipTransferred
+- name: MembershipsDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    abi: Memberships
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/memberships.ts
+    entities: [ ]
+    abis:
+    - name: Memberships
+      file: ./abis/Memberships.json
+    eventHandlers:
     - event: Transfer(indexed address,indexed address,indexed uint256)
       handler: handleTransfer
     - event: OwnershipTransferred(indexed address,indexed address)

@@ -5,6 +5,8 @@ import {
   Collection,
   Sequence,
   Record,
+  Memberships,
+  MembershipNFT,
 } from "../generated/schema";
 
 export const getNodeById = (id: string): Node => {
@@ -32,6 +34,13 @@ export const getCollection = (address: Address): Collection => {
   return collection;
 };
 
+export const getMemberships = (address: Address): Memberships => {
+  const id = `memberships-${address.toHexString()}`;
+  const memberships = Memberships.load(id);
+  if (!memberships) throw new Error(`Memberships ${id} not found`);
+  return memberships;
+};
+
 export const getSequence = (
   collectionId: string,
   sequenceId: i32
@@ -49,4 +58,14 @@ export const getRecordOrNull = (
   const id = `record-${collectionId}-${tokenId.toString()}`;
   const record = Record.load(id);
   return record;
+};
+
+export const getMembershipNFT = (
+  membershipsId: string,
+  tokenId: BigInt
+): MembershipNFT => {
+  const id = `membershipNFT-${membershipsId}-${tokenId.toString()}`;
+  const nft = MembershipNFT.load(id);
+  if (!nft) throw new Error(`MembershipNFT ${id} not found`);
+  return nft;
 };

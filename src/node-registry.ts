@@ -52,13 +52,12 @@ export function handleNodeCreated(event: NodeCreated): void {
   }
 
   node.collectionCount = 0;
+  node.membershipsCount = 0;
   node.childrenCount = 0;
   node.groupChildrenCount = 0;
   node.controllerCount = 0;
   node.sequenceCount = 0;
   node.recordCount = 0;
-  node.splitCount = 0;
-  node.waterfallCount = 0;
 
   node.createdAtTimestamp = timestamp;
   node.createdAtTransaction = event.transaction.hash;
