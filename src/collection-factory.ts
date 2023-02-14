@@ -11,19 +11,20 @@ export function handleCollectionCreated(event: CollectionCreated): void {
   const collection = new Collection(id);
 
   const collectionContract = CollectionContract.bind(address);
-  const controlNodeId = collectionContract.controlNode();
-  collection.controlNode = getNode(controlNodeId).id;
 
   collection.address = address.toHexString();
-  collection.name = event.params.name;
-  collection.symbol = event.params.symbol;
-  collection.ownerAddress = ""; // will be set in handleOwnershipTransferred
+  collection.name = collectionContract.name();
+  collection.symbol = collectionContract.symbol();
+  collection.ownerAddress = collectionContract.owner().toHexString();
   collection.recordCount = 0;
   collection.sequenceCount = 0;
   collection.createdAtTimestamp = timestamp;
   collection.createdAtTransaction = event.transaction.hash;
-  collection.save();
 
-  // spawn new datasource for this catalog
-  CollectionDataSource.create(address);
+  const controlNodeId = collectionContract.controlNode();
+  collection.controlNode = getNode(controlNodeId).id;
+
+  // save and spawn new datasource for this catalog
+  collection.save();
+  // CollectionDataSource.create(address);
 }

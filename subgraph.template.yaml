@@ -56,27 +56,27 @@ dataSources:
       handler: handleNodeBroadcast
     - event: NodeControllerSet(indexed uint64,indexed address,bool)
       handler: handleControllerSet
-# - name: CollectionFactoryDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     address: "{{CollectionFactory}}"
-#     abi: CollectionFactory
-#     startBlock: {{startBlock}}
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/collection-factory.ts
-#     entities: [ ]
-#     abis:
-#     - name: CollectionFactory
-#       file: ./abis/CollectionFactory.json
-#     - name: Collection
-#       file: ./abis/Collection.json
-#     eventHandlers:
-#     - event: CollectionCreated(indexed address,string,string)
-#       handler: handleCollectionCreated
+- name: CollectionFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{CollectionFactory}}"
+    abi: CollectionFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/collection-factory.ts
+    entities: [ ]
+    abis:
+    - name: CollectionFactory
+      file: ./abis/CollectionFactory.json
+    - name: Collection
+      file: ./abis/Collection.json
+    eventHandlers:
+    - event: CollectionCreated(indexed address)
+      handler: handleCollectionCreated
 # templates:
 # - name: CollectionDataSource
 #   kind: ethereum/contract
