@@ -77,27 +77,27 @@ dataSources:
     eventHandlers:
     - event: CollectionCreated(indexed address)
       handler: handleCollectionCreated
-# templates:
-# - name: CollectionDataSource
-#   kind: ethereum/contract
-#   network: {{network}}
-#   source:
-#     abi: Collection
-#   mapping:
-#     kind: ethereum/events
-#     apiVersion: 0.0.5
-#     language: wasm/assemblyscript
-#     file: ./src/collection.ts
-#     entities: [ ]
-#     abis:
-#     - name: Collection
-#       file: ./abis/Collection.json
-#     eventHandlers:
-#     - event: RecordCreated(indexed uint256,indexed uint16,uint80)
-#       handler: handleRecordCreated
-#     - event: SequenceConfigured(indexed uint16,(uint64,uint64,uint64,uint64,address,uint64),bytes)
-#       handler: handleSequenceConfigured
-#     - event: Transfer(indexed address,indexed address,indexed uint256)
-#       handler: handleTransfer
-#     - event: OwnershipTransferred(indexed address,indexed address)
-#       handler: handleOwnershipTransferred
+templates:
+- name: CollectionDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    abi: Collection
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/collection.ts
+    entities: [ ]
+    abis:
+    - name: Collection
+      file: ./abis/Collection.json
+    eventHandlers:
+    - event: RecordCreated(indexed uint256,indexed uint16,uint80)
+      handler: handleRecordCreated
+    - event: SequenceConfigured(indexed uint16,(uint64,uint64,uint64,uint64,address,uint64),bytes)
+      handler: handleSequenceConfigured
+    - event: Transfer(indexed address,indexed address,indexed uint256)
+      handler: handleTransfer
+    - event: OwnershipTransferred(indexed address,indexed address)
+      handler: handleOwnershipTransferred
