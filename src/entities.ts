@@ -5,7 +5,7 @@ import {
   Collection,
   Sequence,
   Record,
-  Memberships,
+  MembershipsCollection,
   MembershipNFT,
 } from "../generated/schema";
 
@@ -34,10 +34,12 @@ export const getCollection = (address: Address): Collection => {
   return collection;
 };
 
-export const getMemberships = (address: Address): Memberships => {
-  const id = `memberships-${address.toHexString()}`;
-  const memberships = Memberships.load(id);
-  if (!memberships) throw new Error(`Memberships ${id} not found`);
+export const getMembershipsCollection = (
+  address: Address
+): MembershipsCollection => {
+  const id = `memberships-collection-${address.toHexString()}`;
+  const memberships = MembershipsCollection.load(id);
+  if (!memberships) throw new Error(`MembershipsCollection ${id} not found`);
   return memberships;
 };
 

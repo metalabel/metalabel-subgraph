@@ -52,7 +52,7 @@ export function handleNodeCreated(event: NodeCreated): void {
   }
 
   node.collectionCount = 0;
-  node.membershipsCount = 0;
+  node.membershipsCollectionCount = 0;
   node.childrenCount = 0;
   node.groupChildrenCount = 0;
   node.controllerCount = 0;

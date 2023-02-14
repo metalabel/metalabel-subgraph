@@ -34,7 +34,7 @@ type Node @entity {
   groupNode: Node
 
   collections: [Collection!]! @derivedFrom(field: "controlNode")
-  memberships: [Memberships!]! @derivedFrom(field: "controlNode")
+  membershipsCollections: [MembershipsCollection!]! @derivedFrom(field: "controlNode")
   children: [Node!]! @derivedFrom(field: "parent")
   groupChildren: [Node!]! @derivedFrom(field: "groupNode")
   controllers: [NodeController!]! @derivedFrom(field: "node")
@@ -42,7 +42,7 @@ type Node @entity {
   records: [Record!]! @derivedFrom(field: "dropNode")
 
   collectionCount: Int!
-  membershipsCount: Int!
+  membershipsCollectionCount: Int!
   childrenCount: Int!
   groupChildrenCount: Int!
   controllerCount: Int!
@@ -122,7 +122,7 @@ type Sequence @entity {
   records: [Record!]! @derivedFrom(field: "sequence")
 }
 
-type Memberships @entity {
+type MembershipsCollection @entity {
   id: ID!
   address: String!
   name: String!
@@ -135,7 +135,7 @@ type Memberships @entity {
 
   membershipNFTCount: Int!
 
-  membershipNFTs: [MembershipNFT!]! @derivedFrom(field: "memberships")
+  membershipNFTs: [MembershipNFT!]! @derivedFrom(field: "membershipsCollection")
 }
 
 type MembershipNFT @entity {
@@ -143,8 +143,8 @@ type MembershipNFT @entity {
   tokenId: BigInt!
   ownerAddress: String!
 
-  memberships: Memberships!
-  controlNode: Node! # denormalized, memberships -> controlNode
+  membershipsCollection: MembershipsCollection!
+  controlNode: Node! # denormalized, memberships collection -> controlNode
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
