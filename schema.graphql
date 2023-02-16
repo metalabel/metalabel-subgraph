@@ -32,6 +32,7 @@ type Node @entity {
   owner: Account
   parent: Node
   groupNode: Node
+  reservedSubdomain: String # null if not reserved yet
 
   collections: [Collection!]! @derivedFrom(field: "controlNode")
   membershipsCollections: [MembershipsCollection!]! @derivedFrom(field: "controlNode")
@@ -111,13 +112,16 @@ type Sequence @entity {
 
   recordCount: Int!
 
-  # only present for drop engine sequences
+  # only present for drop engine V2 sequences
   unitPrice: BigInt # in wei
-  revenueRecipient: String
   royaltyBps: Int
-  uriPrefix: String
-  isPublicMint: Boolean
-  mintAuthority: String # null if public mint
+  revenueRecipient: String
+  allowContractMints: Boolean
+  randomizeMetadataVariants: Boolean
+  maxRecordsPerTransaction: Int
+  primarySaleFeeBps: Int
+  priceDecayPerDay: BigInt
+  decayStopTimestamp: BigInt
 
   records: [Record!]! @derivedFrom(field: "sequence")
 }

@@ -98,6 +98,25 @@ dataSources:
     eventHandlers:
     - event: MembershipsCreated(indexed address)
       handler: handleMembershipsCreated
+- name: ControllerV1DataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{ControllerV1}}"
+    abi: ControllerV1
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/controller-v1.ts
+    entities: [ ]
+    abis:
+    - name: ControllerV1
+      file: ./abis/ControllerV1.json
+    eventHandlers:
+    - event: SubdomainReserved(indexed uint64,string)
+      handler: handleSubdomainReserved
 templates:
 - name: CollectionDataSource
   kind: ethereum/contract
