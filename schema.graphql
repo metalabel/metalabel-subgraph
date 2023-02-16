@@ -113,14 +113,14 @@ type Sequence @entity {
   recordCount: Int!
 
   # only present for drop engine V2 sequences
-  unitPrice: BigInt # in wei
+  price: BigInt # in wei
   royaltyBps: Int
   revenueRecipient: String
   allowContractMints: Boolean
   randomizeMetadataVariants: Boolean
   maxRecordsPerTransaction: Int
   primarySaleFeeBps: Int
-  priceDecayPerDay: BigInt
+  priceDecayPerDay: BigInt # in wei
   decayStopTimestamp: BigInt
 
   records: [Record!]! @derivedFrom(field: "sequence")

@@ -117,6 +117,25 @@ dataSources:
     eventHandlers:
     - event: SubdomainReserved(indexed uint64,string)
       handler: handleSubdomainReserved
+- name: DropEngineV2DataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{DropEngineV2}}"
+    abi: DropEngineV2
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/drop-engine-v2.ts
+    entities: [ ]
+    abis:
+    - name: DropEngineV2
+      file: ./abis/DropEngineV2.json
+    eventHandlers:
+    - event: DropCreated(address,uint16,(uint96,uint16,bool,bool,uint8,address,uint16,uint96,uint64))
+      handler: handleDropCreated
 templates:
 - name: CollectionDataSource
   kind: ethereum/contract
