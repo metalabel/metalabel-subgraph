@@ -41,6 +41,7 @@ type Node @entity {
   controllers: [NodeController!]! @derivedFrom(field: "node")
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
   records: [Record!]! @derivedFrom(field: "dropNode")
+  revenueModules: [RevenueModule!]! @derivedFrom(field: "controlNode")
 
   collectionCount: Int!
   membershipsCollectionCount: Int!
@@ -49,6 +50,7 @@ type Node @entity {
   controllerCount: Int!
   sequenceCount: Int!
   recordCount: Int!
+  revenueModuleCount: Int!
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
@@ -154,28 +156,19 @@ type MembershipNFT @entity {
   createdAtTransaction: Bytes!
 }
 
-# type Split @entity {
-#   id: ID!
-#   address: String!
-#   controlNode: Node!
-#   metadata: String!
-#   recipientAddresses: [String!]! # parallel array w below
-#   recipientAllocations: [Int!]! # raw values from 0xsplit, 1e6 = 100%
+type RevenueModule @entity {
+  id: ID!
+  waterfallAddress: String!
+  splitAddress: String!
+  metadata: String!
+  controlNode: Node!
 
-#   createdAtTimestamp: BigInt!
-#   createdAtTransaction: Bytes!
-# }
+  waterfallRecipientAddresses: [String!]! # all recipients, including residual address
+  waterfallRecipientThresholds: [BigInt!]! # should have length 1 less than recipient array
 
-# type Waterfall @entity {
-#   id: ID!
-#   address: String!
-#   controlNode: Node!
-#   metadata: String!
-#   recipientAddresses: [String!]! # all recipients, including residual address
-#   recipientThresholds: [BigInt!]! # should have length 1 less than recipient array
-#   nonWaterfallRecipientAddress: String!
-#   tokenAddress: String # if null, waterfall is in native ETH
+  splitRecipientAddresses: [String!]! # parallel array w below
+  splitRecipientAllocations: [Int!]! # raw values from 0xsplit, 1e6 = 100%
 
-#   createdAtTimestamp: BigInt!
-#   createdAtTransaction: Bytes!
-# }
+  createdAtTimestamp: BigInt!
+  createdAtTransaction: Bytes!
+}

@@ -98,6 +98,25 @@ dataSources:
     eventHandlers:
     - event: MembershipsCreated(indexed address)
       handler: handleMembershipsCreated
+- name: RevenueModuleFactoryDataSource
+  kind: ethereum/contract
+  network: {{network}}
+  source:
+    address: "{{RevenueModuleFactory}}"
+    abi: RevenueModuleFactory
+    startBlock: {{startBlock}}
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.5
+    language: wasm/assemblyscript
+    file: ./src/revenue-module-factory.ts
+    entities: [ ]
+    abis:
+    - name: RevenueModuleFactory
+      file: ./abis/RevenueModuleFactory.json
+    eventHandlers:
+    - event: RevenueModuleDeployed(indexed address,indexed address,(address,address[],uint256[],address[],uint32[],uint32,uint64,string))
+      handler: handleRevenueModuleDeployed
 - name: ControllerV1DataSource
   kind: ethereum/contract
   network: {{network}}
