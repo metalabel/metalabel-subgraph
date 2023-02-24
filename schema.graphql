@@ -158,16 +158,17 @@ type MembershipNFT @entity {
 
 type RevenueModule @entity {
   id: ID!
-  waterfallAddress: String!
-  splitAddress: String!
   metadata: String!
   controlNode: Node!
+  address: String!
 
-  waterfallRecipientAddresses: [String!]! # all recipients, including residual address
-  waterfallRecipientThresholds: [BigInt!]! # should have length 1 less than recipient array
+  waterfallAddress: String
+  waterfallRecipientAddresses: [String!] # all recipients, including residual address
+  waterfallRecipientThresholds: [BigInt!] # has length 1 less than recipient array
 
-  splitRecipientAddresses: [String!]! # parallel array w below
-  splitRecipientAllocations: [Int!]! # raw values from 0xsplit, 1e6 = 100%
+  splitAddress: String
+  splitRecipientAddresses: [String!] # parallel array w below
+  splitRecipientAllocations: [Int!] # raw values from 0xsplit, 1e6 = 100%
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
