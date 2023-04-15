@@ -104,6 +104,7 @@ export function handleTransfer(event: Transfer): void {
   }
 
   // else, its a transfer
+  const newOwner = event.params.to.toHexString();
 
   // decrement old collector - we don't remove collector entity if count goes
   // down to zero, gives us a way of finding older collectors if we want and can
@@ -120,7 +121,7 @@ export function handleTransfer(event: Transfer): void {
 
   // increment new collector
   const newCollector = getOrCreateRecordCollector(
-    record.ownerAddress,
+    newOwner,
     record.collection,
     record.dropNode,
     record.sequence
@@ -134,7 +135,7 @@ export function handleTransfer(event: Transfer): void {
   newCollector.save();
 
   // write updates to record
-  record.ownerAddress = event.params.to.toHexString();
+  record.ownerAddress = newOwner;
   record.recordCollector = newCollector.id;
   record.save();
 }
