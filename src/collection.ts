@@ -10,6 +10,7 @@ import {
   getCollection,
   getNode,
   getNodeById,
+  getOrCreateRecordCollector,
   getRecordOrNull,
   getSequence,
 } from "./entities";
@@ -75,6 +76,21 @@ export function handleRecordCreated(event: RecordCreated): void {
   const nftContract = Collection.bind(event.address);
   record.ownerAddress = nftContract.ownerOf(record.tokenId).toHexString();
 
+  // collector info
+  const collector = getOrCreateRecordCollector(
+    record.ownerAddress,
+    record.collection,
+    record.dropNode,
+    record.sequence
+  );
+  collector.recordCount += 1;
+  collector.createdAtTimestamp = collector.createdAtTimestamp.isZero()
+    ? event.block.timestamp
+    : collector.createdAtTimestamp;
+  collector.save();
+
+  record.recordCollector = collector.id;
+
   record.save();
 }
 
@@ -83,10 +99,36 @@ export function handleTransfer(event: Transfer): void {
   const record = getRecordOrNull(collection.id, event.params.id);
   if (record === null) {
     // on mint, the RecordCreated event has not yet been emittted, so skip owner
-    // updates. handleRecoredCreated will update the owner
+    // updates. handleRecoredCreated will handle the mint case
     return;
   }
 
+  // else, its a transfer
+
+  // decrement old collector - we don't remove collector entity if count goes
+  // down to zero, gives us a way of finding older collectors if we want and can
+  // always filter by count > 0
+  const previousOwner = record.ownerAddress;
+  const oldCollector = getOrCreateRecordCollector(
+    previousOwner,
+    record.collection,
+    record.dropNode,
+    record.sequence
+  );
+  oldCollector.recordCount -= 1;
+  oldCollector.save();
+
+  // write updates to record
   record.ownerAddress = event.params.to.toHexString();
   record.save();
+
+  // increment new collector
+  const newCollector = getOrCreateRecordCollector(
+    record.ownerAddress,
+    record.collection,
+    record.dropNode,
+    record.sequence
+  );
+  newCollector.recordCount += 1;
+  newCollector.save();
 }

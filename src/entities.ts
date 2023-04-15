@@ -7,6 +7,7 @@ import {
   Record,
   MembershipsCollection,
   MembershipNFT,
+  RecordCollector,
 } from "../generated/schema";
 
 export const getNodeById = (id: string): Node => {
@@ -60,6 +61,27 @@ export const getRecordOrNull = (
   const id = `record-${collectionId}-${tokenId.toString()}`;
   const record = Record.load(id);
   return record;
+};
+
+export const getOrCreateRecordCollector = (
+  ownerAddress: string,
+  collectionId: string,
+  dropNodeId: string,
+  sequenceId: string
+): RecordCollector => {
+  const id = `record-collector-${ownerAddress}-${collectionId}-${dropNodeId}-${sequenceId}`;
+  let collector = RecordCollector.load(id);
+  if (collector) return collector;
+
+  collector = new RecordCollector(id);
+  collector.ownerAddress = ownerAddress;
+  collector.collection = collectionId;
+  collector.dropNode = dropNodeId;
+  collector.sequence = sequenceId;
+  collector.recordCount = 0;
+  collector.createdAtTimestamp = BigInt.fromI32(0);
+
+  return collector;
 };
 
 export const getMembershipNFT = (

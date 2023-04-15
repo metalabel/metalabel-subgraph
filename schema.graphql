@@ -42,6 +42,7 @@ type Node @entity {
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
   records: [Record!]! @derivedFrom(field: "dropNode")
   revenueModules: [RevenueModule!]! @derivedFrom(field: "controlNode")
+  recordCollectors: [RecordCollector!]! @derivedFrom(field: "dropNode")
 
   collectionCount: Int!
   membershipsCollectionCount: Int!
@@ -82,6 +83,7 @@ type Collection @entity {
 
   records: [Record!]! @derivedFrom(field: "collection")
   sequences: [Sequence!]! @derivedFrom(field: "collection")
+  recordCollectors: [RecordCollector!]! @derivedFrom(field: "collection")
 }
 
 type Record @entity {
@@ -89,6 +91,7 @@ type Record @entity {
   tokenId: BigInt!
   sequence: Sequence!
   ownerAddress: String!
+  recordCollector: RecordCollector!
   data: BigInt!
 
   collection: Collection! # denormalized, sequence -> ccollection
@@ -96,6 +99,21 @@ type Record @entity {
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
+}
+
+type RecordCollector @entity {
+  id: ID!
+  ownerAddress: String!
+
+  collection: Collection! # denormalized, sequence -> collection
+  dropNode: Node! # denormalized, sequence -> dropNode
+  sequence: Sequence!
+
+  recordCount: Int!
+
+  records: [Record!]! @derivedFrom(field: "recordCollector")
+
+  createdAtTimestamp: BigInt!
 }
 
 type Sequence @entity {
@@ -126,6 +144,7 @@ type Sequence @entity {
   decayStopTimestamp: BigInt
 
   records: [Record!]! @derivedFrom(field: "sequence")
+  recordCollectors: [RecordCollector!]! @derivedFrom(field: "sequence")
 }
 
 type MembershipsCollection @entity {
