@@ -118,10 +118,6 @@ export function handleTransfer(event: Transfer): void {
   oldCollector.recordCount -= 1;
   oldCollector.save();
 
-  // write updates to record
-  record.ownerAddress = event.params.to.toHexString();
-  record.save();
-
   // increment new collector
   const newCollector = getOrCreateRecordCollector(
     record.ownerAddress,
@@ -136,4 +132,9 @@ export function handleTransfer(event: Transfer): void {
     ? event.block.timestamp
     : newCollector.createdAtTimestamp;
   newCollector.save();
+
+  // write updates to record
+  record.ownerAddress = event.params.to.toHexString();
+  record.recordCollector = newCollector.id;
+  record.save();
 }
