@@ -130,5 +130,10 @@ export function handleTransfer(event: Transfer): void {
     record.sequence
   );
   newCollector.recordCount += 1;
+  // possible this is the first time the collector has been seen, so set the
+  // createdAtTimestamp if it is zero
+  newCollector.createdAtTimestamp = newCollector.createdAtTimestamp.isZero()
+    ? event.block.timestamp
+    : newCollector.createdAtTimestamp;
   newCollector.save();
 }
