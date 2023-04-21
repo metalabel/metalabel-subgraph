@@ -74,10 +74,10 @@ const s = (val: string | null): string => (val === null ? "x" : val);
  * entity is more broad in scope.
  *
  * This allows for some query patterns not otherwise possible, but creates some
- * ergonomic clunkiness
- * - To find collectors across a collection, explicit null must be passed for
- *   all other params, else there will be multiple collectors for the same
- *   owner address
+ * ergonomic clunkiness:
+ * To find collectors across a collection, explicit null must be passed for all
+ * other params, else there will be multiple collectors for the same owner
+ * address
  */
 export const getOrCreateRecordCollector = (
   ownerAddress: string,
@@ -99,33 +99,6 @@ export const getOrCreateRecordCollector = (
   collector.sequence = sequenceId;
   collector.recordCount = 0;
   collector.createdAtTimestamp = timestamp;
-
-  // based on the scope of this collector entity, increment the appropriate
-  // counter on the collection, node, or sequence
-
-  // scoped to a collection
-  if (dropNodeId === null && sequenceId === null) {
-    const collection = Collection.load(collectionId);
-    if (!collection) throw new Error(`Collection ${collectionId} not found`);
-    collection.recordCollectorCount += 1;
-    collection.save();
-  }
-  // scope to a release
-  else if (dropNodeId !== null && sequenceId === null) {
-    const dropNode = Node.load(dropNodeId);
-    if (!dropNode) throw new Error(`Node ${dropNodeId} not found`);
-    dropNode.recordCollectorCount += 1;
-    dropNode.save();
-  }
-  // scope to a sequence
-  else if (dropNodeId !== null && sequenceId !== null) {
-    const sequence = Sequence.load(sequenceId);
-    if (!sequence) throw new Error(`Sequence ${sequenceId} not found`);
-    sequence.recordCollectorCount += 1;
-    sequence.save();
-  } else {
-    throw new Error('Invalid combination of "dropNodeId" and "sequenceId"');
-  }
 
   return collector;
 };

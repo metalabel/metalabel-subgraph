@@ -59,11 +59,11 @@ export function handleRecordCreated(event: RecordCreated): void {
   collection.recordCount += 1;
   collection.save();
 
-  sequence.recordCount += 1;
-  sequence.save();
-
   node.recordCount += 1;
   node.save();
+
+  sequence.recordCount += 1;
+  sequence.save();
 
   const id = `record-${collection.id}-${event.params.tokenId.toString()}`;
   const record = new Record(id);
@@ -130,9 +130,8 @@ export function handleTransfer(event: Transfer): void {
 /**
  * Increments record count for all scoped record collector entities
  *
- * No additional logic needed, if this is a new collector, the getOrCreate method
- * will properly increment the collector count on the associated collection /
- * node / sequence
+ * If the record count for a collector goes to 1, we increment the record
+ * collector count on the associated collection / node / sequence
  */
 function incrementRecordCountForCollector(
   ownerAddress: string,
@@ -151,6 +150,12 @@ function incrementRecordCountForCollector(
   );
   s_collector.recordCount += 1;
   s_collector.save();
+  if (s_collector.recordCount === 1) {
+    const sequence = Sequence.load(sequenceId);
+    if (!sequence) throw new Error(`sequence not found: ${sequenceId}`);
+    sequence.recordCollectorCount += 1;
+    sequence.save();
+  }
 
   // node scope
   const n_collector = getOrCreateRecordCollector(
@@ -162,6 +167,12 @@ function incrementRecordCountForCollector(
   );
   n_collector.recordCount += 1;
   n_collector.save();
+  if (n_collector.recordCount === 1) {
+    const node = Node.load(dropNodeId);
+    if (!node) throw new Error(`node not found: ${dropNodeId}`);
+    node.recordCollectorCount += 1;
+    node.save();
+  }
 
   // collection scope
   const collector = getOrCreateRecordCollector(
@@ -173,6 +184,12 @@ function incrementRecordCountForCollector(
   );
   collector.recordCount += 1;
   collector.save();
+  if (collector.recordCount === 1) {
+    const collection = Collection.load(collectionId);
+    if (!collection) throw new Error(`collection not found: ${dropNodeId}`);
+    collection.recordCollectorCount += 1;
+    collection.save();
+  }
 }
 
 /**
@@ -180,6 +197,10 @@ function incrementRecordCountForCollector(
  *
  * If the record count for a collector goes to zero, we decrement the record
  * collector count on the associated collection / node / sequence
+ *
+ * Not deleting the entity, as it's interesting to see the count = 0 old
+ * collectors. This means there will be more collector entities than the
+ * collector count, but that's ok
  */
 function decrementRecordCountForCollector(
   ownerAddress: string,
@@ -213,7 +234,7 @@ function decrementRecordCountForCollector(
     null,
     timestamp
   );
-  n_collector.recordCount += 1;
+  n_collector.recordCount -= 1;
   n_collector.save();
   if (n_collector.recordCount === 0) {
     const node = Node.load(dropNodeId);
@@ -230,7 +251,7 @@ function decrementRecordCountForCollector(
     null,
     timestamp
   );
-  collector.recordCount += 1;
+  collector.recordCount -= 1;
   collector.save();
   if (collector.recordCount === 0) {
     const collection = Collection.load(collectionId);
