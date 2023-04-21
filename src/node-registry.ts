@@ -59,6 +59,7 @@ export function handleNodeCreated(event: NodeCreated): void {
   node.sequenceCount = 0;
   node.recordCount = 0;
   node.revenueModuleCount = 0;
+  node.recordCollectorCount = 0;
 
   node.createdAtTimestamp = timestamp;
   node.createdAtTransaction = event.transaction.hash;

@@ -42,7 +42,7 @@ type Node @entity {
   sequences: [Sequence!]! @derivedFrom(field: "dropNode")
   records: [Record!]! @derivedFrom(field: "dropNode")
   revenueModules: [RevenueModule!]! @derivedFrom(field: "controlNode")
-  recordCollectors: [RecordCollector!]! @derivedFrom(field: "dropNode")
+  insufficientlyFiltered__recordCollectors: [RecordCollector!]! @derivedFrom(field: "dropNode")
 
   collectionCount: Int!
   membershipsCollectionCount: Int!
@@ -52,6 +52,7 @@ type Node @entity {
   sequenceCount: Int!
   recordCount: Int!
   revenueModuleCount: Int!
+  recordCollectorCount: Int!
 
   createdAtTimestamp: BigInt!
   createdAtTransaction: Bytes!
@@ -80,10 +81,11 @@ type Collection @entity {
 
   recordCount: Int!
   sequenceCount: Int!
+  recordCollectorCount: Int!
 
   records: [Record!]! @derivedFrom(field: "collection")
   sequences: [Sequence!]! @derivedFrom(field: "collection")
-  recordCollectors: [RecordCollector!]! @derivedFrom(field: "collection")
+  insufficientlyFiltered__recordCollectors: [RecordCollector!]! @derivedFrom(field: "collection")
 }
 
 type Record @entity {
@@ -91,7 +93,6 @@ type Record @entity {
   tokenId: BigInt!
   sequence: Sequence!
   ownerAddress: String!
-  recordCollector: RecordCollector!
   data: BigInt!
 
   collection: Collection! # denormalized, sequence -> ccollection
@@ -105,13 +106,11 @@ type RecordCollector @entity {
   id: ID!
   ownerAddress: String!
 
-  collection: Collection! # denormalized, sequence -> collection
-  dropNode: Node! # denormalized, sequence -> dropNode
-  sequence: Sequence!
+  collection: Collection
+  dropNode: Node
+  sequence: Sequence
 
   recordCount: Int!
-
-  records: [Record!]! @derivedFrom(field: "recordCollector")
 
   createdAtTimestamp: BigInt!
 }
@@ -131,6 +130,7 @@ type Sequence @entity {
   createdAtTransaction: Bytes!
 
   recordCount: Int!
+  recordCollectorCount: Int!
 
   # only present for drop engine V2 sequences
   price: BigInt # in wei
@@ -144,7 +144,7 @@ type Sequence @entity {
   decayStopTimestamp: BigInt
 
   records: [Record!]! @derivedFrom(field: "sequence")
-  recordCollectors: [RecordCollector!]! @derivedFrom(field: "sequence")
+  insufficientlyFiltered__recordCollectors: [RecordCollector!]! @derivedFrom(field: "sequence")
 }
 
 type MembershipsCollection @entity {

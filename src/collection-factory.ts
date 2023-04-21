@@ -23,6 +23,7 @@ export function handleCollectionCreated(event: CollectionCreated): void {
   collection.createdAtTransaction = event.transaction.hash;
   collection.recordCount = 0;
   collection.sequenceCount = 0;
+  collection.recordCollectorCount = 0;
   collection.save();
 
   node.collectionCount++;

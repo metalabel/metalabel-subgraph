@@ -1,10 +1,10 @@
-import { Record, Sequence } from "../generated/schema";
+import { Record, Sequence, Collection, Node } from "../generated/schema";
 import {
   OwnershipTransferred,
   RecordCreated,
   SequenceConfigured,
   Transfer,
-  Collection,
+  Collection as CollectionContract,
 } from "../generated/templates/CollectionDatasource/Collection";
 import {
   getCollection,
@@ -14,6 +14,7 @@ import {
   getRecordOrNull,
   getSequence,
 } from "./entities";
+import { BigInt } from "@graphprotocol/graph-ts";
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const collection = getCollection(event.address);
@@ -41,6 +42,7 @@ export function handleSequenceConfigured(event: SequenceConfigured): void {
   sequence.createdAtTimestamp = event.block.timestamp;
   sequence.createdAtTransaction = event.transaction.hash;
   sequence.recordCount = 0;
+  sequence.recordCollectorCount = 0;
   sequence.maxSupply = sequenceData.maxSupply;
   sequence.sealedAfterTimestamp = sequenceData.sealedAfterTimestamp;
   sequence.sealedBeforeTimestamp = sequenceData.sealedBeforeTimestamp;
@@ -73,24 +75,17 @@ export function handleRecordCreated(event: RecordCreated): void {
   record.createdAtTimestamp = event.block.timestamp;
   record.createdAtTransaction = event.transaction.hash;
 
-  const nftContract = Collection.bind(event.address);
+  const nftContract = CollectionContract.bind(event.address);
   record.ownerAddress = nftContract.ownerOf(record.tokenId).toHexString();
 
   // collector info
-  const collector = getOrCreateRecordCollector(
+  incrementRecordCountForCollector(
     record.ownerAddress,
     record.collection,
     record.dropNode,
-    record.sequence
+    record.sequence,
+    event.block.timestamp
   );
-  collector.recordCount += 1;
-  collector.createdAtTimestamp = collector.createdAtTimestamp.isZero()
-    ? event.block.timestamp
-    : collector.createdAtTimestamp;
-  collector.save();
-
-  record.recordCollector = collector.id;
-
   record.save();
 }
 
@@ -110,32 +105,137 @@ export function handleTransfer(event: Transfer): void {
   // down to zero, gives us a way of finding older collectors if we want and can
   // always filter by count > 0
   const previousOwner = record.ownerAddress;
-  const oldCollector = getOrCreateRecordCollector(
+  decrementRecordCountForCollector(
     previousOwner,
     record.collection,
     record.dropNode,
-    record.sequence
+    record.sequence,
+    event.block.timestamp
   );
-  oldCollector.recordCount -= 1;
-  oldCollector.save();
 
   // increment new collector
-  const newCollector = getOrCreateRecordCollector(
+  incrementRecordCountForCollector(
     newOwner,
     record.collection,
     record.dropNode,
-    record.sequence
+    record.sequence,
+    event.block.timestamp
   );
-  newCollector.recordCount += 1;
-  // possible this is the first time the collector has been seen, so set the
-  // createdAtTimestamp if it is zero
-  newCollector.createdAtTimestamp = newCollector.createdAtTimestamp.isZero()
-    ? event.block.timestamp
-    : newCollector.createdAtTimestamp;
-  newCollector.save();
 
   // write updates to record
   record.ownerAddress = newOwner;
-  record.recordCollector = newCollector.id;
   record.save();
+}
+
+/**
+ * Increments record count for all scoped record collector entities
+ *
+ * No additional logic needed, if this is a new collector, the getOrCreate method
+ * will properly increment the collector count on the associated collection /
+ * node / sequence
+ */
+function incrementRecordCountForCollector(
+  ownerAddress: string,
+  collectionId: string,
+  dropNodeId: string,
+  sequenceId: string,
+  timestamp: BigInt
+): void {
+  // sequence scope
+  const s_collector = getOrCreateRecordCollector(
+    ownerAddress,
+    collectionId,
+    dropNodeId,
+    sequenceId,
+    timestamp
+  );
+  s_collector.recordCount += 1;
+  s_collector.save();
+
+  // node scope
+  const n_collector = getOrCreateRecordCollector(
+    ownerAddress,
+    collectionId,
+    dropNodeId,
+    null,
+    timestamp
+  );
+  n_collector.recordCount += 1;
+  n_collector.save();
+
+  // collection scope
+  const collector = getOrCreateRecordCollector(
+    ownerAddress,
+    collectionId,
+    null,
+    null,
+    timestamp
+  );
+  collector.recordCount += 1;
+  collector.save();
+}
+
+/**
+ * Decrements counts for all scoped record collector entities
+ *
+ * If the record count for a collector goes to zero, we decrement the record
+ * collector count on the associated collection / node / sequence
+ */
+function decrementRecordCountForCollector(
+  ownerAddress: string,
+  collectionId: string,
+  dropNodeId: string,
+  sequenceId: string,
+  timestamp: BigInt
+): void {
+  // sequence scope
+  const s_collector = getOrCreateRecordCollector(
+    ownerAddress,
+    collectionId,
+    dropNodeId,
+    sequenceId,
+    timestamp
+  );
+  s_collector.recordCount -= 1;
+  s_collector.save();
+  if (s_collector.recordCount === 0) {
+    const sequence = Sequence.load(sequenceId);
+    if (!sequence) throw new Error(`Sequence not found: ${sequenceId}`);
+    sequence.recordCollectorCount -= 1;
+    sequence.save();
+  }
+
+  // node scope
+  const n_collector = getOrCreateRecordCollector(
+    ownerAddress,
+    collectionId,
+    dropNodeId,
+    null,
+    timestamp
+  );
+  n_collector.recordCount += 1;
+  n_collector.save();
+  if (n_collector.recordCount === 0) {
+    const node = Node.load(dropNodeId);
+    if (!node) throw new Error(`Node not found: ${dropNodeId}`);
+    node.recordCollectorCount -= 1;
+    node.save();
+  }
+
+  // collection scope
+  const collector = getOrCreateRecordCollector(
+    ownerAddress,
+    collectionId,
+    null,
+    null,
+    timestamp
+  );
+  collector.recordCount += 1;
+  collector.save();
+  if (collector.recordCount === 0) {
+    const collection = Collection.load(collectionId);
+    if (!collection) throw new Error(`Collection not found: ${collectionId}`);
+    collection.recordCollectorCount -= 1;
+    collection.save();
+  }
 }
